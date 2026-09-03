@@ -8,5 +8,7 @@ namespace OnlineShopTAR25.Controllers
         {
             return View();
         }
+
+        // teha Data projekti alla ShopTARpe25Context nimega class 
     }
 }
