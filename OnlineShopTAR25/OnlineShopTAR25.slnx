@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="OnlineShopTAR25/OnlineShopTAR25.csproj" />
+  <Project Path="ShopTarpe25.ApplicationServices/ShopTarpe25.ApplicationServices.csproj" />
+  <Project Path="ShopTARpe25.Core/ShopTARpe25.Core.csproj" />
+  <Project Path="ShopTARpe25.Data/ShopTARpe25.Data.csproj" />
+</Solution>
