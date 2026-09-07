@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ShopTARpe25.Core.Dto;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ShopTARpe25.Core.Domain
 {
-    public class SpacesShip
+    public class SpacesShip 
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
