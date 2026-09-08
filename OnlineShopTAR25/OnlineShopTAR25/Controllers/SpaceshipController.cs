@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopTAR25.Models.Spaceship;
 
 namespace OnlineShopTAR25.Controllers
 {
@@ -9,6 +10,22 @@ namespace OnlineShopTAR25.Controllers
             return View();
         }
 
-        // teha Data projekti alla ShopTARpe25Context nimega class 
+        // teha Data projekti alla ShopTARpe25Context nimega class
+
+        //kui kasutaja klikib create nuppu, siis see meetod käivitatakse
+        //tagastab kasutajale vormi, kuhu saab sisestada andmed
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        //kui oled teinud vormi, siis see meetod käivitatakse
+        //saadab andmed serverisse, kus need salvestatakse andmebaasi
+        [HttpPost]
+        public async Task<IActionResult> Create(SpaceshipCreateViewModel vm)
+        {
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

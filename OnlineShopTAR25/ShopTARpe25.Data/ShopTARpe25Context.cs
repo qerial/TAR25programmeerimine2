@@ -1,19 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
-
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ShopTARpe25.Data
 {
     // teha sellest classist DbContext, et saaks andmebaasi kasutada
     public class ShopTARpe25Context : DbContext
     {
-        public ShopTARpe25Context(DbContextOptions<ShopTARpe25Context> options) : base(options)
+        public ShopTARpe25Context(DbContextOptions<ShopTARpe25Context> options) : base (options)
         {
 
         }
         //teha DbSet, et saaks andmebaasi kasutada
-        public DbSet<SpacesShip> Spaceships { get; set; }
-        
-
+        //teha Core projekti alla Domain nimega kaust ja sinna class nimega
+        //nimega Spaceship
+        public DbSet<SpacesShip> SpaceShips { get; set; }
     }
 }
