@@ -31,7 +31,7 @@ namespace ShopTarpe25.ApplicationServices.Services
             domain.BuiltDate = dto.BuiltDate;
             domain.Crew = dto.Crew;
             domain.EnginePower = dto.EnginePower;
-            domain.CreateAt = dto.CreateAt;
+            domain.CreatedAt = dto.CreatedAt;
             domain.ModifiedAt = dto.ModifiedAt;
 
             //siia tuleb kood, mis salvestab domain
