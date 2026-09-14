@@ -21,7 +21,7 @@ namespace OnlineShopTAR25
             //ja Microsoft.EntityFrameworkCore.Tools NuGet paketid
             //kui installitud, siis viidata namespacesis Microsoft.EntityFrameworkCore-le
             builder.Services.AddDbContext<ShopTARpe25Context>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("ShopTARpe25Context")));
 
 
             var app = builder.Build();
