@@ -1,8 +1,7 @@
 ﻿namespace OnlineShopTAR25.Models.Spaceship
 {
-    public class SpaceshipIndexViewModel
+    public class SpaceshipDetailsViewModel
     {
-
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Classification { get; set; } = string.Empty;

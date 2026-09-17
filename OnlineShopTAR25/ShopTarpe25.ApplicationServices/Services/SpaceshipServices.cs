@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
-using System.Runtime.CompilerServices;
 
 
 
@@ -44,6 +43,17 @@ namespace ShopTarpe25.ApplicationServices.Services
             
 
             return domain;
+        }
+        //siia teha meetod nimega Details Async
+        //see ainult pärib andmed contextist
+        public async Task<SpacesShip> Details(Guid id)
+        {
+            SpacesShip domain = new();
+
+            var result = await _context.SpaceShips
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
         }
     }
 }

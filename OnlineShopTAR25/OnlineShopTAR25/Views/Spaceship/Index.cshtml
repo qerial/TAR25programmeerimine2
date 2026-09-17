@@ -1,53 +1,48 @@
-﻿@model OnlineShopTAR25.Models.Spaceship.SpaceshipIndexViewModel
-<h2>SpaceS Index</h2>
-<h4>SpaceShip</h4>
+﻿@model IEnumerable<OnlineShopTAR25.Models.Spaceship.SpaceshipIndexViewModel>
 
 
 @{
-    ViewData["Title"] = "Spaceship Index";
+    int rowNumber = 1;
 }
 
-<h2>Spaceship Index</h2>
-<h4>Spaceships</h4>
-
-<div class="mb-3">
-    <a asp-action="Create" asp-controller="Spaceship" class="btn btn-primary">
-        Create Spaceship
-    </a>
+<div class="h1">
+    Spaceship
 </div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Classification</th>
-            <th>Built Date</th>
-            <th>Crew</th>
-            <th>Engine Power</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <tr>
-            <td colspan="6">
-                No spaceships to display.
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<p>
-    <a asp-controller="Home" asp-action="Index">
-        Tagasi kodulehele
-    </a>
-</p>
+<form method="get">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nr</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Built Date</th>
+                <th scope="col">Crew</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var spaceship in Model)
+            {
+                <tr>
+                    <td>"@rowNumber"</td>
+                    <td>@spaceship.Name</td>
+                    <td>@spaceship.Classification</td>
+                    <td>@spaceship.BuiltDate</td>
+                    <td>@spaceship.Crew</td>
+                    <td>
+                        <a asp-action="Delete" asp-controller="Spaceship" type="" class="btn-outline-dark btn btn-danger">Delete</a>
+                        <a asp-action="details" asp-controller="Spaceship" type="" class="btn-outline-dark btn btn-info">Details</a>
+                        <a asp-action="Update" asp-controller="Spaceship" type="" class="btn btn-outline-dark btn-warning">Update</a>
 
 
-<div>
-    <a asp-action="create" asp-controller="Spaceship" type="" class="btn btn-primary">Create</a>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
+                    </td>
+                </tr>
+                    rowNumber++;
+                }
+        </tbody>
+    </table>
+</form>
+<a asp-action="Index" asp-controller="Home" type="" class="btn btn-primary  btn-lg  btn-outline-dark ">Back to home</a>
+
+
+<a asp-action="create" asp-controller="Spaceship" type="" class="btn btn-primary  btn-lg  btn-outline-dark ">Create</a>
