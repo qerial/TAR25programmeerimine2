@@ -1,34 +1,60 @@
-﻿@model IEnumerable<OnlineShopTAR25.Models.Spaceship.SpaceshipDetailsViewModel>
-@{
-    ViewData["Title"] = "Details Page";
-}
-<h1>@ViewData["Title"]</h1>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Nr</th>
-                <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Built Date</th>
-                <th scope="col">Crew</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var spaceship in Model)
-            {
-                <tr>
-                    <td>@spaceship.Name</td>
-                    <td>@spaceship.Classification</td>
-                    <td>@spaceship.BuiltDate</td>
-                    <td>@spaceship.Crew</td>
-                    <td>
-                </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+﻿@model OnlineShopTAR25.Models.Spaceship.SpaceshipDetailsViewModel
 
+<h1>Details</h1>
+
+<div>
+    <h4>Spaceships</h4>
+    <hr />
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="Id" class="col-sn-2 col-form-label"></label>
+            @Html.DisplayFor(Model => Model.Id)
+        </div>
+    </dl>
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="Name" class="col-sn-2 col-form-label"></label>
+            @Html.DisplayFor(Model => Model.Name)
+        </div>
+    </dl>
+
+<dl class="row">
+    <div class="form-group row">
+        <label asp-for="Classification" class="col-sn-2 col-form-label"></label>
+        @Html.DisplayFor(Model => Model.Classification)
+    </div>
+</dl>
+<dl class="row">
+    <div class="form-group row">
+        <label asp-for="BuiltDate" class="col-sn-2 col-form-label"></label>
+        @Html.DisplayFor(Model => Model.BuiltDate)
+    </div>
+</dl>
+<dl class="row">
+    <div class="form-group row">
+        <label asp-for="Crew" class="col-sn-2 col-form-label"></label>
+        @Html.DisplayFor(Model => Model.Crew)
+    </div>
+</dl>
+<dl class="row">
+    <div class="form-group row">
+        <label asp-for="EnginePower" class="col-sn-2 col-form-label"></label>
+        @Html.DisplayFor(Model => Model.EnginePower)
+    </div>
+</dl>
+<dl class="row">
+    <div class="form-group row">
+        <label asp-for="CreatedAt" class="col-sn-2 col-form-label"></label>
+        @Html.DisplayFor(Model => Model.CreatedAt)
+    </div>
+</dl>
+<dl class="row">
+    <div class="form-group row">
+        <label asp-for="ModifiedAt" class="col-sn-2 col-form-label"></label>
+        @Html.DisplayFor(Model => Model.ModifiedAt)
+    </div>
+</dl>
+</div>
     <div class="form-group">
         <a asp-action="Index" asp-controller="Spaceship" type="" class="btn btn-success">Back to list</a>
     </div>

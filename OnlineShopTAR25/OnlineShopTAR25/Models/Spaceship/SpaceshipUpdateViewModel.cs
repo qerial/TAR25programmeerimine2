@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShopTARpe25.Core.Dto
+﻿namespace OnlineShopTAR25.Models.Spaceship
 {
-
-    //dto vahendab andmeid controlleri ja service classide vahel.
-    public class SpaceshipDto
+    public class SpaceshipUpdateViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;

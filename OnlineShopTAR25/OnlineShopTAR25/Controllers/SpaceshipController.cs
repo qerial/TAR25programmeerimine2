@@ -115,7 +115,7 @@ namespace OnlineShopTAR25.Controllers
             var vm = new SpaceshipDetailsViewModel();
             vm.Id = spaceship.Id;
             vm.Name = spaceship.Name;
-            vm.Name = spaceship.Classification;
+            vm.Classification = spaceship.Classification;
             vm.BuiltDate = spaceship.BuiltDate;
             vm.EnginePower = spaceship.EnginePower;
             vm.Crew = spaceship.Crew;
@@ -126,5 +126,30 @@ namespace OnlineShopTAR25.Controllers
 
             return View(vm);
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var spaceship = await _spaceShipServices.Details(id);
+
+            if (spaceship == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new SpaceshipUpdateViewModel();
+
+            vm.Id = spaceship.Id;
+            vm.Name = spaceship.Name;
+            vm.Classification = spaceship.Classification;
+            vm.BuiltDate = spaceship.BuiltDate;
+            vm.EnginePower = spaceship.EnginePower;
+            vm.Crew = spaceship.Crew;
+            vm.CreatedAt = spaceship.CreatedAt;
+            vm.ModifiedAt = spaceship.ModifiedAt;
+
+            return View(vm);
+        }
+
+
     }
 }

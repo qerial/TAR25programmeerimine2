@@ -3,7 +3,7 @@
     public class SpaceshipDetailsViewModel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string Classification { get; set; } = string.Empty;
         public DateTime? BuiltDate { get; set; }
         public int? Crew { get; set; }

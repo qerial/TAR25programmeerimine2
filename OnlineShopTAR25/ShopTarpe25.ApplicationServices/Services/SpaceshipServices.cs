@@ -30,8 +30,8 @@ namespace ShopTarpe25.ApplicationServices.Services
             domain.BuiltDate = dto.BuiltDate;
             domain.Crew = dto.Crew;
             domain.EnginePower = dto.EnginePower;
-            domain.CreatedAt = dto.CreatedAt;
-            domain.ModifiedAt = dto.ModifiedAt;
+            domain.CreatedAt = DateTime.Now;
+            domain.ModifiedAt = DateTime.Now;
 
             //siia tuleb kood, mis salvestab domain
             //objekti andmebaasi
@@ -54,6 +54,24 @@ namespace ShopTarpe25.ApplicationServices.Services
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
+        }
+        public async Task<SpacesShip> Update(SpacesShip dto)
+        {
+            SpacesShip spaceship = new();
+
+            spaceship.Id = dto.Id;
+            spaceship.Name = dto.Name;
+            spaceship.Classification = dto.Classification;
+            spaceship.BuiltDate = dto.BuiltDate;
+            spaceship.Crew = dto.Crew;
+            spaceship.EnginePower = dto.EnginePower;
+            spaceship.CreatedAt = DateTime.Now;
+            spaceship.ModifiedAt = DateTime.Now;
+
+            _context.SpaceShips.Update(spaceship);
+            await _context.SaveChangesAsync();
+
+            return spaceship;
         }
     }
 }
