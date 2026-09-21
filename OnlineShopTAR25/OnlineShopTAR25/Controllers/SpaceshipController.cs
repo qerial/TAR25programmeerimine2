@@ -150,6 +150,29 @@ namespace OnlineShopTAR25.Controllers
             return View(vm);
         }
 
+        [HttpGet]
 
+        public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
+        {
+            var dto = new SpaceshipDto()
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Classification = vm.Classification,
+                Crew = vm.Crew,
+                EnginePower = vm.EnginePower,
+                BuiltDate = vm.BuiltDate,
+                CreatedAt = vm.CreatedAt,
+                ModifiedAt = vm.ModifiedAt,
+            };
+
+            var result =await _spaceShipServices.Update(dto);
+            if(result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
