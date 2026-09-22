@@ -1,0 +1,236 @@
+﻿/* =========================
+   GENERAL
+   ========================= */
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+}
+
+main {
+    min-height: 70vh;
+}
+
+
+/* =========================
+   NAVBAR
+   ========================= */
+
+.navbar {
+    background-color: #111827 !important;
+    padding: 15px 0;
+}
+
+    .navbar .navbar-brand {
+        color: white !important;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .navbar .nav-link {
+        color: #d1d5db !important;
+        font-weight: 600;
+        margin-left: 10px;
+        transition: 0.2s;
+    }
+
+        .navbar .nav-link:hover {
+            color: white !important;
+        }
+
+    .navbar .navbar-toggler {
+        border-color: #6b7280;
+    }
+
+    .navbar .navbar-toggler-icon {
+        filter: invert(1);
+    }
+
+
+/* =========================
+   PAGE
+   ========================= */
+
+.container {
+    max-width: 1200px;
+}
+
+main {
+    padding-top: 30px;
+}
+
+
+/* =========================
+   HEADINGS
+   ========================= */
+
+h1 {
+    color: #111827;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+h2 {
+    color: #1f2937;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #374151;
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background-color: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+}
+
+    .btn-primary:hover {
+        background-color: #3730a3 !important;
+        border-color: #3730a3 !important;
+        transform: translateY(-2px);
+    }
+
+.btn-danger {
+    border-radius: 8px;
+}
+
+
+/* =========================
+   CARDS
+   ========================= */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.25s;
+    overflow: hidden;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-weight: bold;
+    color: #111827;
+}
+
+.card-text {
+    color: #6b7280;
+}
+
+
+/* =========================
+   FORMS
+   ========================= */
+
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    padding: 10px 12px;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+
+/* =========================
+   TABLES
+   ========================= */
+
+.table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+    .table thead {
+        background-color: #111827;
+        color: white;
+    }
+
+    .table th {
+        padding: 15px;
+    }
+
+    .table td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+footer {
+    margin-top: 60px;
+    padding: 25px 0;
+    background-color: #111827;
+    color: #d1d5db !important;
+}
+
+    footer a {
+        color: #818cf8;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            color: white;
+        }
+
+
+/* =========================
+   LINKS
+   ========================= */
+
+a {
+    transition: 0.2s;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+
+    h1 {
+        font-size: 28px;
+    }
+
+    main {
+        padding-top: 20px;
+    }
+
+    .navbar .nav-link {
+        margin-left: 0;
+        padding: 10px;
+    }
+}
