@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OnlineShopTAR25.Models.Spaceship;
+using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
-using OnlineShopTAR25.Models.Spaceship;
 using ShopTARpe25.Data;
 
 namespace OnlineShopTAR25.Controllers
@@ -150,7 +152,7 @@ namespace OnlineShopTAR25.Controllers
             return View(vm);
         }
 
-        [HttpGet]
+        [HttpPost]
 
         public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
         {
@@ -163,7 +165,7 @@ namespace OnlineShopTAR25.Controllers
                 EnginePower = vm.EnginePower,
                 BuiltDate = vm.BuiltDate,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt,
+                ModifiedAt = vm.ModifiedAt
             };
 
             var result =await _spaceShipServices.Update(dto);
@@ -173,6 +175,36 @@ namespace OnlineShopTAR25.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            var spaceship = await _spaceShipServices.Delete(Id);
+            if (spaceship == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new SpaceshipDeleteViewModel();
+            
+                vm.Id = spaceship.Id;
+                vm.Name = spaceship.Name;
+                vm.Classification = spaceship.Classification;
+                vm.Crew = spaceship.Crew;
+                vm.EnginePower = spaceship.EnginePower;
+                vm.BuiltDate = spaceship.BuiltDate;
+                vm.CreatedAt = spaceship.CreatedAt;
+                vm.ModifiedAt = spaceship.ModifiedAt;
+
+                return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeletePost(Guid id)
+        {
+
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

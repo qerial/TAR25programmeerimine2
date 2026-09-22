@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core.Pipeline;
+using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
@@ -55,7 +56,7 @@ namespace ShopTarpe25.ApplicationServices.Services
 
             return result;
         }
-        public async Task<SpacesShip> Update(SpacesShip dto)
+        public async Task<SpacesShip> Update(SpaceshipDto dto)
         {
             SpacesShip spaceship = new();
 
@@ -73,5 +74,18 @@ namespace ShopTarpe25.ApplicationServices.Services
 
             return spaceship;
         }
+
+        public async Task<SpacesShip> Delete(Guid id)
+        {
+            var result = await _context.SpaceShips
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            _context.SpaceShips.Remove(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+
+        }
+
     }
 }
