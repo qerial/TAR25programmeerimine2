@@ -48,14 +48,25 @@ namespace ShopTarpe25.ApplicationServices.Services
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.Name;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
+                    //iga kord, kui faili laed ülesse siis tehakse see väikesteks tükkideks
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
 
                         //domaini teha FileToApi
-                        FileToApi 
+                        FileToApi path = new FileToApi
+                        {
+                            //tuleb ära mappida
+                            //domain ja ?? 
+                            Id = Guid.NewGuid(),
+                            ExistingFilePath = uniqueFileName,
+                            SpaceshipID = domain.Id
+                        };
+
+                        _context.FileToApis.AddAsync(path);
                     }
                 }
+
             }
         }
     }

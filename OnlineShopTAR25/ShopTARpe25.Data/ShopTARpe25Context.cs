@@ -17,5 +17,6 @@ namespace ShopTARpe25.Data
         //teha Core projekti alla Domain nimega kaust ja sinna class nimega
         //nimega Spaceship
         public DbSet<SpacesShip> SpaceShips { get; set; }
+        public DbSet<FileToApi> FileToApis { get; set; }
     }
 }
