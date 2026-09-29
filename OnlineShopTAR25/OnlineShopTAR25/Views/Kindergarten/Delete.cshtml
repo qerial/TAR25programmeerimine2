@@ -1,0 +1,59 @@
+﻿@model OnlineShopTAR25.Models.Kindergarten.KindergartenDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Kindergarten";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+        <div class="card-header bg-danger text-white">
+            <h2 class="mb-0">Delete Kindergarten</h2>
+        </div>
+
+        <div class="card-body">
+
+            <h4 class="mb-4">Are you sure you want to delete this kindergarten group?</h4>
+
+            <div class="mb-3">
+                <strong>Group Name:</strong>
+                @Model.GroupName
+            </div>
+
+            <div class="mb-3">
+                <strong>Children Count:</strong>
+                @Model.ChildrenCount
+            </div>
+
+            <div class="mb-3">
+                <strong>Kindergarten Name:</strong>
+                @Model.KindergartenName
+            </div>
+
+            <div class="mb-3">
+                <strong>Teacher Name:</strong>
+                @Model.TeacherName
+            </div>
+
+            <div class="mt-4">
+
+                <form asp-action="DeletePost" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <button type="submit" class="btn btn-danger">
+                        Delete
+                    </button>
+
+                    <a asp-action="Index"
+                       asp-controller="Kindergarten"
+                       class="btn btn-secondary">
+                        Back to list
+                    </a>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,76 @@
+﻿@model OnlineShopTAR25.Models.Kindergarten.KindergartenCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Kindergarten";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-5">
+
+                    ```
+                    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+                    <p class="text-center text-muted mb-4">
+                        Add a new kindergarten group
+                    </p>
+
+                    <form asp-action="Create">
+
+                        <div class="mb-3">
+                            <label asp-for="GroupName" class="form-label"></label>
+                            <input asp-for="GroupName" class="form-control" placeholder="Enter group name" />
+                            <span asp-validation-for="GroupName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ChildrenCount" class="form-label"></label>
+                            <input asp-for="ChildrenCount" class="form-control" placeholder="Enter number of children" />
+                            <span asp-validation-for="ChildrenCount" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="KindergartenName" class="form-label"></label>
+                            <input asp-for="KindergartenName" class="form-control" placeholder="Enter kindergarten name" />
+                            <span asp-validation-for="KindergartenName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TeacherName" class="form-label"></label>
+                            <input asp-for="TeacherName" class="form-control" placeholder="Enter teacher name" />
+                            <span asp-validation-for="TeacherName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreatedAt" class="form-label"></label>
+                            <input asp-for="CreatedAt" class="form-control" />
+                            <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="UpdatedAt" class="form-label"></label>
+                            <input asp-for="UpdatedAt" class="form-control" />
+                            <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index"
+                               asp-controller="Kindergarten"
+                               class="btn btn-outline-secondary px-4">
+                                Back to list
+                            </a>
+
+                            <button type="submit" class="btn btn-primary px-4">
+                                Create
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    ```
+
+</div>

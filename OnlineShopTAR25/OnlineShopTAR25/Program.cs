@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShopTarpe25.ApplicationServices.Services;
+using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
@@ -15,6 +16,7 @@ namespace OnlineShopTAR25
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ISpaceShipServices, SpaceshipServices >();
+            builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
 
 
             //selleks, et tuleb installida Microsoft.EntityFrameworkCore.SqlServer

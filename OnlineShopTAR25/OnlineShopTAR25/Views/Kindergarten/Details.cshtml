@@ -1,0 +1,55 @@
+﻿@model OnlineShopTAR25.Models.Kindergarten.KindergartenDetailsViewModel
+
+@{
+    ViewData["Title"] = "Kindergarten Details";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Kindergarten Details</h2>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-sm-4 fw-bold">Group Name</div>
+                <div class="col-sm-8">@Model.GroupName</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4 fw-bold">Children Count</div>
+                <div class="col-sm-8">@Model.ChildrenCount</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4 fw-bold">Kindergarten Name</div>
+                <div class="col-sm-8">@Model.KindergartenName</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4 fw-bold">Teacher Name</div>
+                <div class="col-sm-8">@Model.TeacherName</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4 fw-bold">Created At</div>
+                <div class="col-sm-8">@Model.CreatedAt</div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-sm-4 fw-bold">Updated At</div>
+                <div class="col-sm-8">@Model.UpdatedAt</div>
+            </div>
+
+            <a asp-action="Index"
+               asp-controller="Kindergarten"
+               class="btn btn-secondary">
+                Back to list
+            </a>
+
+        </div>
+    </div>
+
+</div>
