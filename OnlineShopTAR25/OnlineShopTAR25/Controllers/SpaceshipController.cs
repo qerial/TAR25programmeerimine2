@@ -74,6 +74,8 @@ namespace OnlineShopTAR25.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            SpaceshipCreateViewModel vm = new();
+
             return View();
         }
 
@@ -92,7 +94,15 @@ namespace OnlineShopTAR25.Controllers
                     Classification = vm.Classification,
                     BuiltDate = vm.BuiltDate,
                     Crew = vm.Crew,
-                    EnginePower = vm.EnginePower
+                    EnginePower = vm.EnginePower,
+                    Files = vm.Files,
+                    FileToApiDtos = vm.Image
+                    .Select(file => new FileToApiDto
+                    {
+                        ID = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                        SpaceshipId = file.SpaceshipId
+                    }).ToArray()
                 };
 
                 var result = await _spaceShipServices.Create(dto);

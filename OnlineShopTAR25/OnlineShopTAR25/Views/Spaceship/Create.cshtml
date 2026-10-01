@@ -40,7 +40,20 @@
         <input asp-for="ModifiedAt" class="form-control" />
         <span asp-validation-for="ModifiedAt" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    
+    See koht on failide üleslaadimise vorm.
+    <div class="form-group row">
+        <label asp-for="Files" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-5">
+            <input asp-for="Files" class="form-control" type="file" multiple />
+        </div>
+    </div>
+
+    @foreach (var file in Model.Image)
+        {
+            <partial name="_Images" model="file" />
+        }
+        <div class="form-group">
         <input type="submit" value="Create" class="btn btn-success" />
         <a asp-action="Index" asp-controller="Spaceship" type="" class="btn btn-success">Back to list</a>
     </div>

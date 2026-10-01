@@ -3,6 +3,7 @@ using ShopTarpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
+using ShopTARpe25.Data.Migrations;
 
 namespace OnlineShopTAR25
 {
@@ -14,7 +15,10 @@ namespace OnlineShopTAR25
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            //See on dependency injection, mis võimaldab meil kasutada teenuseid controllerites
             builder.Services.AddScoped<ISpaceShipServices, SpaceshipServices >();
+            builder.Services.AddScoped<IFileServices, FileServices >();
 
 
             //selleks, et tuleb installida Microsoft.EntityFrameworkCore.SqlServer

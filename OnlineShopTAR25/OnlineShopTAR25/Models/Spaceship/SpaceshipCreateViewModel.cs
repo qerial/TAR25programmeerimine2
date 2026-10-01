@@ -1,4 +1,6 @@
-﻿namespace OnlineShopTAR25.Models.Spaceship
+﻿using OnlineShopTAR25.Models.File;
+
+namespace OnlineShopTAR25.Models.Spaceship
 
 {
     public class SpaceshipCreateViewModel
@@ -9,6 +11,10 @@
         public DateTime? BuiltDate { get; set; }
         public int? Crew { get; set; }
         public int? EnginePower { get; set; }
+
+        public List<IFormFile> Files { get; set; }
+        public List<ImageViewModel> Image { get; set; }
+            = new List<ImageViewModel>();
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }
