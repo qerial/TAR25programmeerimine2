@@ -55,6 +55,12 @@
     </div>
 </dl>
 </div>
+
+@foreach(var images in Model.Images)
+{
+    <partial name="_Images" model="images"/>
+}
+
     <div class="form-group">
         <a asp-action="Index" asp-controller="Spaceship" type="" class="btn btn-success">Back to list</a>
     </div>

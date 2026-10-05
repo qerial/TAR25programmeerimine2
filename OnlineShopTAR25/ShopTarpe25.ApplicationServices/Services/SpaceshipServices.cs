@@ -28,7 +28,7 @@ namespace ShopTarpe25.ApplicationServices.Services
         {
             SpacesShip domain = new();
 
-            domain.Id = dto.Id;
+            domain.Id = Guid.NewGuid();
             domain.Name = dto.Name;
             domain.Classification = dto.Classification;
             domain.BuiltDate = dto.BuiltDate;

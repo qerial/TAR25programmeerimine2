@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OnlineShopTAR25.Models.File;
 using OnlineShopTAR25.Models.Spaceship;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
@@ -122,6 +123,15 @@ namespace OnlineShopTAR25.Controllers
                 return NotFound();
                 //teha viewModel ja see siin välja kutsuda
             }
+
+            var images = await _context.FileToApis
+                .Where(x => x.SpaceshipID == id )
+                .Select(y => new ImageViewModel
+                {
+                    FilePath = y.ExistingFilePath,
+                    ImageId = y.Id
+                }).ToArrayAsync();
+
             var vm = new SpaceshipDetailsViewModel();
             vm.Id = spaceship.Id;
             vm.Name = spaceship.Name;
@@ -131,8 +141,9 @@ namespace OnlineShopTAR25.Controllers
             vm.Crew = spaceship.Crew;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Images.AddRange(images);
 
-
+            
 
             return View(vm);
         }
