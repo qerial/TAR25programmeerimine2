@@ -6,6 +6,7 @@ using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopTAR25.Controllers
 {
@@ -128,7 +129,7 @@ namespace OnlineShopTAR25.Controllers
                 .Where(x => x.SpaceshipID == id )
                 .Select(y => new ImageViewModel
                 {
-                    FilePath = y.ExistingFilePath,
+                    FilePath = "/multipleFileUpload/" + y.ExistingFilePath,
                     ImageId = y.Id
                 }).ToArrayAsync();
 
@@ -206,16 +207,25 @@ namespace OnlineShopTAR25.Controllers
                 return NotFound();
             }
 
-            var vm = new SpaceshipDeleteViewModel
+            var images = await _context.FileToApis
+            .Where(x => x.SpaceshipID == id)
+            .Select(y => new ImageViewModel
             {
-                Id = spaceship.Id,
-                Name = spaceship.Name,
-                Classification = spaceship.Classification,
-                Crew = spaceship.Crew,
-                EnginePower = spaceship.EnginePower,
-                BuiltDate = spaceship.BuiltDate,
-                CreatedAt = spaceship.CreatedAt,
-                ModifiedAt = spaceship.ModifiedAt
+            FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+            ImageId = y.Id
+            }).ToArrayAsync();
+
+            var vm = new SpaceshipDeleteViewModel();
+            {
+                vm.Id = spaceship.Id;
+                vm.Name = spaceship.Name;
+                vm.Classification = spaceship.Classification;
+                vm.Crew = spaceship.Crew;
+                vm.EnginePower = spaceship.EnginePower;
+                vm.BuiltDate = spaceship.BuiltDate;
+                vm.CreatedAt = spaceship.CreatedAt;
+                vm.ModifiedAt = spaceship.ModifiedAt;
+                vm.Images.AddRange(images);
             };
 
             return View(vm);
