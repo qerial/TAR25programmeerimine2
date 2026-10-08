@@ -61,9 +61,9 @@
             @Html.DisplayFor(model => model.ModifiedAt)
         </div>
     </dl>
-    @foreach (var images in Model.Images)
+    @foreach (var file in Model.Images)
     {
-        <partial name="_Images" model="images" />
+        <partial name="_Images" model="file" />
         <br />
     }
     <hr />

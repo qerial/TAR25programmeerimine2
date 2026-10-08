@@ -10,7 +10,6 @@ namespace ShopTARpe25.ApplicationServices.Services
 {
     public class FileServices : IFileServices
     {
-        //teha constructor, mis ühendab DB-d 
         private readonly ShopTARpe25Context _context;
         private readonly IHostEnvironment _webHost;
 
@@ -29,33 +28,33 @@ namespace ShopTARpe25.ApplicationServices.Services
             //kindlasti peab ankeedil olema üks fail
             if (dto.Files != null && dto.Files.Count > 0)
             {
-
-                //kui ei ole wwwroot-s multipleFileUpload directory t
+                //kui ei ole wwwroot-s multipleFileUpload directoryt
                 if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
                 {
-                    //tee directory wwwrooti alla
+                    //, siis tee directory wwwrooti alla
                     Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
                 }
 
                 foreach (var file in dto.Files)
                 {
-                    //meil on vaja teha muutuja nimega uploadsFolder
+                    //meil on vaja teha muutuja nimega uploadsFolder.
                     //sinna muutuja taha on vaja Path kombineerida
                     string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
                     //igale failile unikaalne Guid selle nime ette
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    //iga kord, kui faili laed ülesse, siis tehakse see väikesteks
+                    //iga kord, kui faili laed ülesse, siis tehakse see väikesteks 
                     //tükkideks
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
 
                         //domaini teha FileToApi
-                        //FileToApi
                         FileToApi path = new FileToApi
                         {
+                            //tuleb ära mappida 
+                            //domain ja ??
                             Id = Guid.NewGuid(),
                             ExistingFilePath = uniqueFileName,
                             SpaceshipID = domain.Id
@@ -66,15 +65,16 @@ namespace ShopTARpe25.ApplicationServices.Services
                 }
             }
         }
+
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
         {
-            //kui on vaja kustutada fail, siis tuleb see üles leida
+            //kui on vaja kustuda fail, siis tuleb see üles leida
             var imageId = await _context.FileToApis
                 .FirstOrDefaultAsync(x => x.Id == dto.ID);
 
-            //kus asuvad failid, mida hakatkse kustutama
+            //kus asuvad failid, mida hakkatakse kustutama
             var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-            + imageId.ExistingFilePath;
+                + imageId.ExistingFilePath;
 
             //kui fail on olemas, siis kustuta see
             if (File.Exists(filePath))

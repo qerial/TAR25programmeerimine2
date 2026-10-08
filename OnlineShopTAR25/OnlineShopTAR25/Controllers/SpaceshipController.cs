@@ -6,6 +6,7 @@ using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
+using ShopTARpe25.Data.Migrations;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopTAR25.Controllers
@@ -14,17 +15,20 @@ namespace OnlineShopTAR25.Controllers
     {
         private readonly ISpaceShipServices _spaceShipServices;
         private readonly ShopTARpe25Context _context;
+        private readonly IFileServices _fileService;
 
         //teha constructor et saaks kasutada teenust, mis on
         //defineeritud ISoaceshipServices liideses
         public SpaceshipController
             (
             ISpaceShipServices spaceShipServices,
-            ShopTARpe25Context context
+            ShopTARpe25Context context,
+            IFileServices fileServices
             )
         {
             _spaceShipServices = spaceShipServices;
             _context = context;
+            _fileService = fileServices;
         }
 
 
@@ -257,5 +261,23 @@ namespace OnlineShopTAR25.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        {
+            //tuleb ühendada dto ja viewModel, et saaks kasutada teenuse meetodit
+            var dto = new FileToApiDto()
+            {
+                ID = vm.ImageId
+            };
+            //kutsuda teenuse meetodit, mis kustutab pildi andmebaasist
+            var image = await _fileService.RemoveImageFromApi(dto);
+
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
