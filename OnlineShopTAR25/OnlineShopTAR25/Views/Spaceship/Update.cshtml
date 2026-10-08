@@ -14,24 +14,29 @@
                 <input asp-for="Name" class="form-control" />
             </div>
         </div>
+        <br />
+
         <div class="form-group row">
             <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
                 <input asp-for="Classification" class="form-control" />
             </div>
         </div>
+        <br />
         <div class="form-group row">
             <label asp-for="BuiltDate" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
                 <input asp-for="BuiltDate" class="form-control" />
             </div>
         </div>
+        <br />
         <div class="form-group row">
             <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
                 <input asp-for="Crew" class="form-control" />
             </div>
         </div>
+        <br />
         <div class="form-group row">
             <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
@@ -39,7 +44,13 @@
             </div>
         </div>
 
-        <input asp-action="Update" asp-controller="Spaceship" type="submit" class="btn btn-success" value="Update" />
+        @foreach (var file in Model.Images)
+        {
+            <partial name="_Images" model="file" />
+            <br />
+        }
 
+        <input asp-action="Update" asp-controller="Spaceship" type="submit" class="btn btn-success" value="Update" />
+        <a asp-action="Index" asp-controller="Spaceship" type="" class="btn btn-success">Back to list</a>
     </form>
 </div>

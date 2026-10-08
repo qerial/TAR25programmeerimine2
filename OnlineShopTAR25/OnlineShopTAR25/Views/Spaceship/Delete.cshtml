@@ -61,7 +61,11 @@
             @Html.DisplayFor(model => model.ModifiedAt)
         </div>
     </dl>
-
+    @foreach (var images in Model.Images)
+    {
+        <partial name="_Images" model="images" />
+        <br />
+    }
     <hr />
 
     <form asp-action="DeletePost" asp-controller="Spaceship" method="post">

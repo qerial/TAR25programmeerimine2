@@ -126,12 +126,12 @@ namespace OnlineShopTAR25.Controllers
             }
 
             var images = await _context.FileToApis
-                .Where(x => x.SpaceshipID == id )
-                .Select(y => new ImageViewModel
-                {
-                    FilePath = "/multipleFileUpload/" + y.ExistingFilePath,
-                    ImageId = y.Id
-                }).ToArrayAsync();
+            .Where(x => x.SpaceshipID == id)
+            .Select(y => new ImageViewModel
+            {
+                FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+                ImageId = y.Id
+            }).ToArrayAsync();
 
             var vm = new SpaceshipDetailsViewModel();
             vm.Id = spaceship.Id;
@@ -158,6 +158,14 @@ namespace OnlineShopTAR25.Controllers
                 return NotFound();
             }
 
+            var images = await _context.FileToApis
+           .Where(x => x.SpaceshipID == id)
+           .Select(y => new ImageViewModel
+           {
+               FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+               ImageId = y.Id
+           }).ToArrayAsync();
+
             var vm = new SpaceshipUpdateViewModel();
 
             vm.Id = spaceship.Id;
@@ -168,6 +176,8 @@ namespace OnlineShopTAR25.Controllers
             vm.Crew = spaceship.Crew;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Images.AddRange(images);
+
 
             return View(vm);
         }

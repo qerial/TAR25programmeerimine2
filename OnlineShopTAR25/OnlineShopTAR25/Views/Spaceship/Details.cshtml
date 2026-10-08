@@ -63,12 +63,12 @@
 </dl>
 </div>
 
-@foreach(var images in Model.Images)
+
+@foreach (var images in Model.Images)
 {
-    <partial name="_Images" model="images"/>
+    <partial name="_Images" model="images" />
     <br />
 }
-
     <div class="form-group">
         <a asp-action="Index" asp-controller="Spaceship" type="" class="btn btn-success">Back to list</a>
     </div>
