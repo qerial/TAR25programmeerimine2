@@ -1,8 +1,14 @@
-﻿@model OnlineShopTAR25.Models.Spaceship.SpaceshipCreateViewModel
-@{
-    ViewData["Title"] = "Create Page";
+﻿@model OnlineShopTAR25.Models.Spaceship.SpaceshipCreateUpdateViewModel
+
+@if (Model.Id.HasValue)
+{
+    <h1>Spaceship Update</h1>
 }
-<h1>@ViewData["Title"]</h1>
+else
+{
+    <h1>Spaceship Create</h1>    
+}
+
 
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
