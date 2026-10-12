@@ -197,9 +197,14 @@ namespace OnlineShopTAR25.Controllers
                 Classification = vm.Classification,
                 Crew = vm.Crew,
                 EnginePower = vm.EnginePower,
-                BuiltDate = vm.BuiltDate,
-                CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                Files = vm.Files,
+                FileToApiDtos = vm.Images
+                    .Select(file => new FileToApiDto
+                    {
+                        ID = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                        SpaceshipId = file.SpaceshipId
+                    }).ToArray()
             };
 
             var result =await _spaceShipServices.Update(dto);
