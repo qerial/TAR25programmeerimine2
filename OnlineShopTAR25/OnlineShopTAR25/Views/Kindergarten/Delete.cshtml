@@ -37,12 +37,17 @@
 
             <div class="mt-4">
 
-                <form asp-action="DeletePost" method="post">
+                @foreach (var file in Model.Images)
+                {
+                    <partial name="_Images" model="file" />
+                    <br />
+                }
+                <hr />
+
+                <form asp-action="DeletePost" asp-controller="Kindergarten" method="post">
                     <input type="hidden" asp-for="Id" />
 
-                    <button type="submit" class="btn btn-danger">
-                        Delete
-                    </button>
+                    <input type="submit" value="Delete" class="btn btn-danger" />
 
                     <a asp-action="Index"
                        asp-controller="Kindergarten"

@@ -54,18 +54,21 @@
                             <span asp-validation-for="UpdatedAt" class="text-danger"></span>
                         </div>
 
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="Index"
-                               asp-controller="Kindergarten"
-                               class="btn btn-outline-secondary px-4">
-                                Back to list
-                            </a>
-
-                            <button type="submit" class="btn btn-primary px-4">
-                                Create
-                            </button>
+                        <div class="form-group row">
+                            <label asp-for="Files" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <input asp-for="Files" class="form-control" type="file" multiple />
+                            </div>
                         </div>
 
+                        @foreach (var file in Model.Image)
+                        {
+                            <partial name="_Images" model="file" />
+                        }
+                        <div class="form-group">
+                            <input asp-action="create" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Create" />
+                            <a asp-action="Index" asp-controller="Spaceship" type="" class="btn btn-success">Back to list</a>
+                        </div>
                     </form>
                 </div>
             </div>

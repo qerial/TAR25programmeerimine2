@@ -1,9 +1,11 @@
-﻿using ShopTARpe25.Core.Dto;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OnlineShopTAR25.Models.Kindergarten;
+using ShopTarpe25.ApplicationServices.Services;
+using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
-using OnlineShopTAR25.Models.Kindergarten;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ShopTARpe25.Controllers
 {
@@ -12,15 +14,18 @@ namespace ShopTARpe25.Controllers
 
         private readonly IKindergartenServices _kindergartenServices;
         private readonly ShopTARpe25Context _context;
+        private readonly IFileServices _fileService;
 
         public KindergartenController
             (
             IKindergartenServices KindergartenServices,
-            ShopTARpe25Context context
+            ShopTARpe25Context context,
+            IFileServices fileServices
             )
         {
             _kindergartenServices = KindergartenServices;
             _context = context;
+            _fileService = fileServices;
         }
         public IActionResult Index()
         {
@@ -62,9 +67,16 @@ namespace ShopTARpe25.Controllers
                     ChildrenCount = vm.ChildrenCount,
                     KindergartenName = vm.KindergartenName,
                     TeacherName = vm.TeacherName,
-                    CreatedAt = vm.CreatedAt,
-                    UpdatedAt = vm.UpdatedAt
+                    Files = vm.Files,
+                    FileToApiDtos = vm.Image
+                    .Select(file => new FileToApiDto
+                    {
+                        ID = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                        KindergartenId = file.KinderGartenId
+                    }).ToArray()
                 };
+
 
 
                 var result = await _kindergartenServices.Create(dto);
@@ -82,6 +94,14 @@ namespace ShopTARpe25.Controllers
             {
                 return NotFound();
             }
+
+            var images = await _context.FileToApis
+            .Where(x => x.KindergartenID == id)
+            .Select(y => new ImageViewModel
+            {
+                FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+                ImageId = y.Id
+            }).ToArrayAsync();
             var vm = new KindergartenDetailsViewModel
             {
                 Id = result.Id,
@@ -95,7 +115,6 @@ namespace ShopTARpe25.Controllers
             return View(vm);
         }
         [HttpGet]
-        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _kindergartenServices.Details(id);
@@ -104,24 +123,41 @@ namespace ShopTARpe25.Controllers
             {
                 return NotFound();
             }
-
-            var vm = new KindergartenDeleteViewModel
+            var images = await _context.FileToApis
+            .Where(x => x.KindergartenID == id)
+            .Select(y => new ImageViewModel
             {
-                Id = result.Id,
-                GroupName = result.GroupName,
-                ChildrenCount = result.ChildrenCount,
-                KindergartenName = result.KindergartenName,
-                TeacherName = result.TeacherName,
-                CreatedAt = result.CreatedAt,
-                UpdatedAt = result.UpdatedAt
+                FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+                ImageId = y.Id
+            }).ToArrayAsync();
+
+            var vm = new KindergartenDeleteViewModel();
+            {
+                vm.Id = result.Id;
+                vm.GroupName = result.GroupName;
+                vm.ChildrenCount = result.ChildrenCount;
+                vm.KindergartenName = result.KindergartenName;
+                vm.TeacherName = result.TeacherName;
+                vm.CreatedAt = result.CreatedAt;
+                vm.UpdatedAt = result.UpdatedAt;
+                vm.Images.AddRange(images);
+
             };
 
             return View(vm);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePost(Guid id)
         {
+            var kindergarten = await _kindergartenServices.Details(id);
+
+            if (kindergarten == null)
+            {
+                return NotFound();
+            }
+
             await _kindergartenServices.Delete(id);
 
             return RedirectToAction(nameof(Index));
@@ -135,6 +171,15 @@ namespace ShopTARpe25.Controllers
             {
                 return NotFound();
             }
+
+
+            var images = await _context.FileToApis
+           .Where(x => x.KindergartenID == id)
+           .Select(y => new ImageViewModel
+           {
+               FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+               ImageId = y.Id
+           }).ToArrayAsync();
 
             var vm = new KindergartenUpdateViewModel();
             {
@@ -168,6 +213,24 @@ namespace ShopTARpe25.Controllers
             }
             var result = await _kindergartenServices.Update(dto);
             if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        {
+            //tuleb ühendada dto ja viewModel, et saaks kasutada teenuse meetodit
+            var dto = new FileToApiDto()
+            {
+                ID = vm.ImageId
+            };
+            //kutsuda teenuse meetodit, mis kustutab pildi andmebaasist
+            var image = await _fileService.RemoveImageFromApi(dto);
+
+            if (image == null)
             {
                 return RedirectToAction(nameof(Index));
             }

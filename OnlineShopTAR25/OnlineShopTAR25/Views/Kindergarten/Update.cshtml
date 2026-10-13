@@ -39,19 +39,22 @@
                     <input asp-for="TeacherName" class="form-control" />
                     <span asp-validation-for="TeacherName" class="text-danger"></span>
                 </div>
-
-                <input asp-for="UpdatedAt" type="hidden" />
-
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        Update
-                    </button>
-
-                    <a asp-action="Index" class="btn btn-secondary">
-                        Back
-                    </a>
+                <div class="form-group row">
+                    <label asp-for="Files" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input asp-for="Files" class="form-control" type="file" multiple />
+                    </div>
                 </div>
 
+                @foreach (var file in Model.Images)
+                {
+                    <partial name="_Images" model="file" />
+                    <input asp-action="RemoveImage" asp-controller="Kindergarten" asp-route-imageId="@file.ImageId"
+                           type="submit" class=" btn btn-danger" value="Remove Image" />
+                    <br />
+                }
+                <input asp-action="Update" asp-controller="Kindergarten" type="submit" class="btn btn-success" value="Update" />
+                <a asp-action="Index" asp-controller="Kindergarten" type="" class="btn btn-success">Back to list</a>
             </form>
         </div>
     </div>
