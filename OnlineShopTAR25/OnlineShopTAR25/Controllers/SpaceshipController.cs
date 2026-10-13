@@ -67,7 +67,7 @@ namespace OnlineShopTAR25.Controllers
                 EnginePower = x.EnginePower
 
             });
-             
+
 
 
             return View(result);
@@ -82,7 +82,7 @@ namespace OnlineShopTAR25.Controllers
         {
             SpaceshipCreateUpdateViewModel vm = new();
 
-            return View(vm);
+            return View("CreateUpdate", vm);
         }
 
         // kui oled teinud vormi, siis see meetod käivitatakse
@@ -92,33 +92,38 @@ namespace OnlineShopTAR25.Controllers
         {
             // luua vaheinstant, mis sisaldab andmeid, mis on saadetud vormist
             // need andmed tuleb edasi saata dto-sse, mis on mõeldud andmebaasi salvestamiseks
-            
-                var dto = new SpaceshipDto
+
+            var dto = new SpaceshipDto
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Classification = vm.Classification,
+                BuiltDate = vm.BuiltDate,
+                Crew = vm.Crew,
+                EnginePower = vm.EnginePower,
+                Files = vm.Files,
+                FileToApiDtos = vm.Image
+                .Select(file => new FileToApiDto
                 {
-                    Id = vm.Id,
-                    Name = vm.Name,
-                    Classification = vm.Classification,
-                    BuiltDate = vm.BuiltDate,
-                    Crew = vm.Crew,
-                    EnginePower = vm.EnginePower,
-                    Files = vm.Files,
-                    FileToApiDtos = vm.Image
-                    .Select(file => new FileToApiDto
-                    {
-                        ID = file.ImageId,
-                        ExistingFilePath = file.FilePath,
-                        SpaceshipId = file.SpaceshipId
-                    }).ToArray()
-                };
+                    ID = file.ImageId,
+                    ExistingFilePath = file.FilePath,
+                    SpaceshipId = file.SpaceshipId
+                }).ToArray()
+            };
 
-                var result = await _spaceShipServices.Create(dto);
+            var result = await _spaceShipServices.Create(dto);
 
+            if (result == null)
+            {
                 return RedirectToAction(nameof(Index));
             }
+            return RedirectToAction(nameof(Index));
 
-            //tuleb teha Details meetod 
-            //see kutsub välja interfacest service meetodi
-        
+        }
+
+        //tuleb teha Details meetod 
+        //see kutsub välja interfacest service meetodi
+
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -149,7 +154,7 @@ namespace OnlineShopTAR25.Controllers
             vm.ModifiedAt = spaceship.ModifiedAt;
             vm.Images.AddRange(images);
 
-            
+
 
             return View(vm);
         }
@@ -171,7 +176,7 @@ namespace OnlineShopTAR25.Controllers
                ImageId = y.Id
            }).ToArrayAsync();
 
-            var vm = new SpaceshipUpdateViewModel();
+            var vm = new SpaceshipCreateUpdateViewModel();
 
             vm.Id = spaceship.Id;
             vm.Name = spaceship.Name;
@@ -181,10 +186,10 @@ namespace OnlineShopTAR25.Controllers
             vm.Crew = spaceship.Crew;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
-            vm.Images.AddRange(images);
+            vm.Image.AddRange(images);
 
 
-            return View(vm);
+            return View("CreateUpdate", vm);
         }
 
         [HttpPost]
@@ -199,7 +204,7 @@ namespace OnlineShopTAR25.Controllers
                 Crew = vm.Crew,
                 EnginePower = vm.EnginePower,
                 Files = vm.Files,
-                FileToApiDtos = vm.Images
+                FileToApiDtos = vm.Image
                     .Select(file => new FileToApiDto
                     {
                         ID = file.ImageId,
@@ -208,8 +213,8 @@ namespace OnlineShopTAR25.Controllers
                     }).ToArray()
             };
 
-            var result =await _spaceShipServices.Update(dto);
-            if(result == null)
+            var result = await _spaceShipServices.Update(dto);
+            if (result == null)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -231,8 +236,8 @@ namespace OnlineShopTAR25.Controllers
             .Where(x => x.SpaceshipID == id)
             .Select(y => new ImageViewModel
             {
-            FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
-            ImageId = y.Id
+                FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
+                ImageId = y.Id
             }).ToArrayAsync();
 
             var vm = new SpaceshipDeleteViewModel();
@@ -246,7 +251,8 @@ namespace OnlineShopTAR25.Controllers
                 vm.CreatedAt = spaceship.CreatedAt;
                 vm.ModifiedAt = spaceship.ModifiedAt;
                 vm.Images.AddRange(images);
-            };
+            }
+            ;
 
             return View(vm);
         }

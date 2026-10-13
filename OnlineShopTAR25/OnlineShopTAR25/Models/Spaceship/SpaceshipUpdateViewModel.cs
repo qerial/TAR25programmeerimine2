@@ -4,14 +4,14 @@ namespace OnlineShopTAR25.Models.Spaceship
 {
     public class SpaceshipUpdateViewModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Classification { get; set; } = string.Empty;
         public DateTime? BuiltDate { get; set; }
         public int? Crew { get; set; }
         public int? EnginePower { get; set; }
         public List<IFormFile> Files { get; set; }
-        public List<ImageViewModel> Images { get; set; }
+        public List<ImageViewModel> Image { get; set; }
         = new List<ImageViewModel>();
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
