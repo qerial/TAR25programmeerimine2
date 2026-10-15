@@ -70,40 +70,6 @@ namespace ShopTARpe25.Data.Migrations
 
                     b.ToTable("Kindergartens");
                 });
-
-            modelBuilder.Entity("ShopTARpe25.Core.Domain.SpacesShip", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("BuiltDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Classification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Crew")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EnginePower")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SpaceShips");
-                });
 #pragma warning restore 612, 618
         }
     }

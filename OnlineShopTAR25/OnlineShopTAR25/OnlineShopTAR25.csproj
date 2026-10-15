@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\style.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
       <PrivateAssets>all</PrivateAssets>
@@ -27,6 +23,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ShopTarpe25.ApplicationServices\ShopTarpe25.ApplicationServices.csproj" />
     <ProjectReference Include="..\ShopTARpe25.Core\ShopTARpe25.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\multipleFileUpload\" />
   </ItemGroup>
 
 </Project>

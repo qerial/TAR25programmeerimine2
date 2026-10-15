@@ -50,7 +50,9 @@ namespace ShopTARpe25.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            KindergartenCreateViewModel vm = new();
+
+            return View(vm);
         }
 
         // kui oled teinud vormi, siis see meetod käivitatakse
@@ -87,21 +89,27 @@ namespace ShopTARpe25.Controllers
         }
         [HttpGet]
 
+
+        [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
             var result = await _kindergartenServices.Details(id);
+
             if (result == null)
             {
                 return NotFound();
             }
 
             var images = await _context.FileToApis
-            .Where(x => x.KindergartenID == id)
-            .Select(y => new ImageViewModel
-            {
-                FilePath = /*~/multipleFileUpload/" + */y.ExistingFilePath,
-                ImageId = y.Id
-            }).ToArrayAsync();
+                .Where(x => x.KindergartenID == id)
+                .Select(y => new ImageViewModel
+                {
+                    FilePath = y.ExistingFilePath,
+                    ImageId = y.Id,
+                    KinderGartenId = y.KindergartenID
+                })
+                .ToListAsync();
+
             var vm = new KindergartenDetailsViewModel
             {
                 Id = result.Id,
@@ -112,6 +120,9 @@ namespace ShopTARpe25.Controllers
                 CreatedAt = result.CreatedAt,
                 UpdatedAt = result.UpdatedAt
             };
+
+            vm.Images.AddRange(images);
+
             return View(vm);
         }
         [HttpGet]
@@ -142,7 +153,8 @@ namespace ShopTARpe25.Controllers
                 vm.UpdatedAt = result.UpdatedAt;
                 vm.Images.AddRange(images);
 
-            };
+            }
+            ;
 
             return View(vm);
         }
@@ -190,6 +202,7 @@ namespace ShopTARpe25.Controllers
                 vm.TeacherName = kindergarten.TeacherName;
                 vm.CreatedAt = kindergarten.CreatedAt;
                 vm.UpdatedAt = kindergarten.UpdatedAt;
+                vm.Images.AddRange(images);
 
                 return View(vm);
             }
@@ -201,17 +214,27 @@ namespace ShopTARpe25.Controllers
 
         public async Task<IActionResult> Update(KindergartenUpdateViewModel vm)
         {
-            var dto = new KindergartenDto();
+            var dto = new KindergartenDto()
             {
-                dto.Id = vm.Id;
-                dto.GroupName = vm.GroupName;
-                dto.ChildrenCount = vm.ChildrenCount;
-                dto.KindergartenName = vm.KindergartenName;
-                dto.TeacherName = vm.TeacherName;
-                dto.CreatedAt = vm.CreatedAt;
-                dto.UpdatedAt = DateTime.Now;
-            }
+                Id = vm.Id,
+                GroupName = vm.GroupName,
+                ChildrenCount = vm.ChildrenCount,
+                KindergartenName = vm.KindergartenName,
+                TeacherName = vm.TeacherName,
+                CreatedAt = vm.CreatedAt,
+                UpdatedAt = DateTime.Now,
+                Files = vm.Files,
+                FileToApiDtos = vm.Images
+                    .Select(file => new FileToApiDto
+                    {
+                        ID = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                        KindergartenId = file.KinderGartenId
+                    }).ToArray()
+            };
+
             var result = await _kindergartenServices.Update(dto);
+
             if (result == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -219,23 +242,45 @@ namespace ShopTARpe25.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveImage(ImageViewModel vm)
         {
-            //tuleb ühendada dto ja viewModel, et saaks kasutada teenuse meetodit
-            var dto = new FileToApiDto()
-            {
-                ID = vm.ImageId
-            };
-            //kutsuda teenuse meetodit, mis kustutab pildi andmebaasist
-            var image = await _fileService.RemoveImageFromApi(dto);
+            var image = await _context.FileToApis
+                .FirstOrDefaultAsync(x => x.Id == vm.ImageId);
 
             if (image == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            var kindergartenId = image.KindergartenID;
+            var fileName = image.ExistingFilePath;
+
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                var filePath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "multipleFileUpload",
+                    Path.GetFileName(fileName)
+                );
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            var dto = new FileToApiDto
+            {
+                ID = vm.ImageId
+            };
+
+            await _fileService.RemoveImageFromApi(dto);
+
+            return RedirectToAction(nameof(Update), new { id = kindergartenId });
         }
     }
 }
