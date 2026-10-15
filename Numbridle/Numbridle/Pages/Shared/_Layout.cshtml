@@ -1,0 +1,40 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090d18" />
+    <title>@ViewData["Title"] · Numbridle</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-container">
+            <a class="brand" asp-page="/Index" aria-label="Numbridle home">
+                <span class="brand-mark">N</span>
+                <span>NUMBRIDLE<span class="brand-period">.</span></span>
+            </a>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <a asp-page="/Index">Discover</a>
+                <a asp-page="/Collection">Collection</a>
+                <a asp-page="/Leaderboard">Leaderboard</a>
+            </nav>
+
+            <a class="nav-cta" asp-page="/Index">Play now <span>↗</span></a>
+        </div>
+    </header>
+
+    <div class="page-content">
+        @RenderBody()
+    </div>
+
+    <footer class="site-footer">
+        <span>NUMBRIDLE © @DateTime.UtcNow.Year</span>
+        <span>EVERY NUMBER HAS A STORY.</span>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

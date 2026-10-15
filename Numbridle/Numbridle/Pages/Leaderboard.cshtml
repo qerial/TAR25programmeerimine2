@@ -1,0 +1,52 @@
+﻿@page
+@model Numbridle.Pages.LeaderboardModel
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<main class="game-container">
+    <section class="hero">
+        <span class="eyebrow">THE HALL OF DISCOVERIES</span>
+        <h1>Top <span class="gradient-text">players.</span></h1>
+        <p class="hero-description">
+            The players with the most points lead the archive.
+        </p>
+    </section>
+
+    <section class="leaderboard">
+        <div class="leaderboard-heading">
+            <span>RANK / PLAYER</span>
+            <span>TOTAL SCORE</span>
+        </div>
+
+        @if (Model.Players.Count == 0)
+        {
+            <div class="empty-state">
+                <p>No players on the leaderboard yet.</p>
+            </div>
+        }
+        else
+        {
+            @for (int i = 0; i < Model.Players.Count; i++)
+            {
+                var player = Model.Players[i];
+
+                <article class="leaderboard-row">
+                    <div class="player-identity">
+                        <span class="rank-number">
+                            @(i + 1)
+                        </span>
+                        <div class="player-avatar">
+                            @player.Username[..1].ToUpperInvariant()
+                        </div>
+                        <strong>@player.Username</strong>
+                    </div>
+
+                    <strong class="leaderboard-score">
+                        @player.TotalScore.ToString("N0")
+                    </strong>
+                </article>
+            }
+        }
+    </section>
+</main>

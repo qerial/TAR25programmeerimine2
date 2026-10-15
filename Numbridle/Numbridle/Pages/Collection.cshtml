@@ -1,0 +1,62 @@
+﻿@page
+@model Numbridle.Pages.CollectionModel
+@{
+    ViewData["Title"] = "Collection";
+}
+
+<main class="game-container">
+    <section class="hero">
+        <span class="eyebrow">YOUR PERSONAL ARCHIVE</span>
+        <h1>Number <span class="gradient-text">collection.</span></h1>
+        <p class="hero-description">
+            Every meaning you've uncovered, saved permanently.
+        </p>
+    </section>
+
+    @if (Model.Discoveries.Count == 0)
+    {
+        <section class="empty-state">
+            <div class="empty-icon">⌘</div>
+            <h2>Your archive is empty</h2>
+            <p class="muted">Discover your first number to get started.</p>
+            <a class="game-button button-link" asp-page="/Index">
+                Start discovering
+            </a>
+        </section>
+    }
+    else
+    {
+        <section class="collection-grid">
+            @foreach (var discovery in Model.Discoveries)
+            {
+                var meaning = discovery.NumberMeaning;
+
+                <article class="discovery-card">
+                    <div class="collection-card-top">
+                        <span class="rarity-badge rarity-@meaning.Rarity.ToLowerInvariant()">
+                            @meaning.Rarity
+                        </span>
+                        <span class="collection-points">
+                            +@discovery.PointsAwarded.ToString("N0")
+                        </span>
+                    </div>
+
+                    <div class="collection-number">
+                        @(meaning.ZeroTier == 6
+                            ? "∅"
+                            : meaning.Combination.TrimStart('0') is { Length: > 0 } visible
+                                ? visible
+                                : "0")
+                    </div>
+
+                    <h2>@meaning.Name</h2>
+                    <p class="muted">@meaning.Description</p>
+
+                    <span class="collection-date">
+                        Discovered @discovery.DiscoveredAtUtc.ToString("yyyy-MM-dd HH:mm") UTC
+                    </span>
+                </article>
+            }
+        </section>
+    }
+</main>

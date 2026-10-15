@@ -1,0 +1,256 @@
+﻿@page
+@model Numbridle.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Numbridle";
+}
+
+<div class="game-container">
+
+    <header class="game-header">
+        <a class="brand" asp-page="/Index">
+            NUMBRIDLE<span>.</span>
+        </a>
+
+        <div class="header-status">
+            <span class="status-dot"></span>
+            RNG DISCOVERY GAME
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            ONE IN A MILLION
+            <span class="eyebrow-line"></span>
+        </div>
+
+        <h1>
+            Every number has<br />
+            a <span>story.</span>
+        </h1>
+
+        <p class="hero-description">
+            Roll the dice. Discover the impossible.
+            Collect numbers and become legendary.
+        </p>
+    </section>
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon purple-icon">✦</div>
+            <div class="stat-content">
+                <span class="stat-label">TOTAL SCORE</span>
+                <strong>@Model.TotalScore.ToString("N0")</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green-icon">◈</div>
+            <div class="stat-content">
+                <span class="stat-label">DISCOVERIES</span>
+                <strong>@Model.DiscoveryCount.ToString("N0")</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon blue-icon">∞</div>
+            <div class="stat-content">
+                <span class="stat-label">POSSIBILITIES</span>
+                <strong>1,000,000</strong>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="roll-card">
+
+        <div class="card-top">
+            <div class="generator-label">
+                <span class="status-dot"></span>
+                NUMBER GENERATOR
+            </div>
+
+            <span class="range-label">000000 — 999999</span>
+        </div>
+
+        <div class="number-stage">
+            <div class="number-decoration decoration-left">✧</div>
+
+            <div id="rollNumber"
+                 class="roll-number"
+                 aria-live="polite"
+                 aria-label="Generated number">
+                @if (Model.Result != null)
+                {
+                    @Model.Result.Combination
+                }
+                else
+                {
+                    @:??????
+                }
+            </div>
+
+            <div class="number-decoration decoration-right">✧</div>
+        </div>
+
+        <p class="roll-hint" id="rollHint">
+            Your next discovery is waiting.
+        </p>
+
+        <form method="post"
+              asp-page-handler="Roll"
+              id="rollForm">
+
+            <button type="submit"
+                    class="roll-button"
+                    id="rollButton">
+
+                <span class="button-icon">🎲</span>
+                <span class="button-text">ROLL</span>
+                <span class="button-arrow">→</span>
+
+            </button>
+        </form>
+
+        <div class="roll-footer">
+            <span>✦</span>
+            Every roll is random
+            <span class="footer-separator">•</span>
+            Every discovery counts
+        </div>
+
+    </section>
+
+    @if (Model.Result != null)
+    {
+        <section class="result-card rarity-@Model.Result.Rarity.ToLowerInvariant()"
+                 id="resultCard">
+
+            <div class="result-top">
+                <span class="rarity-badge">
+                    @Model.Result.Rarity
+                </span>
+
+                @if (Model.Result.IsNewDiscovery)
+                {
+                    <span class="new-badge">
+                        ✦ NEW DISCOVERY
+                    </span>
+                }
+                else
+                {
+                    <span class="duplicate-badge">
+                        ALREADY DISCOVERED
+                    </span>
+                }
+            </div>
+
+            <div class="result-number">
+                @Model.Result.Combination
+            </div>
+
+            <h2>@Model.Result.Name</h2>
+
+            <p class="result-description">
+                @Model.Result.Description
+            </p>
+
+            <div class="result-divider"></div>
+
+            <div class="result-points">
+                <div>
+                    <span class="stat-label">POINTS EARNED</span>
+                    <strong class="points-value">
+                        +@Model.Result.PointsAwarded.ToString("N0")
+                    </strong>
+                </div>
+
+                <div class="result-total">
+                    <span class="stat-label">TOTAL SCORE</span>
+                    <strong>
+                        @Model.Result.TotalScore.ToString("N0")
+                    </strong>
+                </div>
+            </div>
+
+            @if (Model.Result.ZeroTier > 0)
+            {
+                <div class="zero-message">
+                    <span class="zero-message-icon">✦</span>
+                    <div>
+                        <strong>LEADING ZERO BONUS</strong>
+                        <p>
+                            @Model.Result.ZeroTier leading zero(s)
+                            detected. A special number has appeared!
+                        </p>
+                    </div>
+                </div>
+            }
+
+        </section>
+    }
+
+    <section class="rarity-section">
+
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">THE COLLECTION</span>
+                <h2>Rarity tiers</h2>
+            </div>
+
+            <span class="collection-caption">
+                Find the impossible.
+            </span>
+        </div>
+
+        <div class="rarity-grid">
+
+            <div class="rarity-item common">
+                <span class="rarity-symbol">○</span>
+                <strong>COMMON</strong>
+                <span>Regular numbers</span>
+            </div>
+
+            <div class="rarity-item rare">
+                <span class="rarity-symbol">◇</span>
+                <strong>RARE</strong>
+                <span>Unusual patterns</span>
+            </div>
+
+            <div class="rarity-item epic">
+                <span class="rarity-symbol">✧</span>
+                <strong>EPIC</strong>
+                <span>Special numbers</span>
+            </div>
+
+            <div class="rarity-item legendary">
+                <span class="rarity-symbol">✦</span>
+                <strong>LEGENDARY</strong>
+                <span>Incredible finds</span>
+            </div>
+
+            <div class="rarity-item mythic">
+                <span class="rarity-symbol">♛</span>
+                <strong>MYTHIC</strong>
+                <span>Almost impossible</span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="game-footer">
+        <a class="footer-brand" asp-page="/Index">
+            NUMBRIDLE.
+        </a>
+        <span>One million numbers. Infinite discoveries.</span>
+    </footer>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/digit-roll.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+}
