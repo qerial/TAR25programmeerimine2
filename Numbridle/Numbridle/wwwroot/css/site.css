@@ -906,61 +906,175 @@ a {
     }
 }
 
-/* Smooth, individual digit rolling */
-.roll-number {
+* =========================================
+RANDOM NUMBER ROLL
+========================================= */
+
+#rollNumber {
     display: inline-flex;
-    justify-content: center;
     align-items: center;
-    font-variant-numeric: tabular-nums;
+    justify-content: center;
     white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    transition: gap .3s ease;
 }
 
-.digit-slot {
+#rollNumber .digit-slot {
     display: inline-block;
     position: relative;
+    flex: 0 0 auto;
     height: 1.2em;
+    min-width: .62em;
     overflow: hidden;
-    min-width: 0.62em;
-    vertical-align: bottom;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    will-change: transform, opacity, width;
 }
 
-.digit-strip {
+#rollNumber .digit-strip {
     display: flex;
     flex-direction: column;
-    will-change: transform;
     transform: translateY(0);
+    will-change: transform, filter;
 }
 
-    .digit-strip span {
+    #rollNumber .digit-strip > span {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex: 0 0 1.2em;
         height: 1.2em;
-        flex-shrink: 0;
     }
 
-    .digit-strip.rolling {
-        animation: digit-roll 1.8s cubic-bezier(.16, 1, .3, 1) both;
-    }
-
-@keyframes digit-roll {
-    from {
-        transform: translateY(var(--roll-start));
-        filter: blur(2px);
-    }
-
-    to {
-        transform: translateY(var(--roll-end));
-        filter: blur(0);
-    }
+#rollNumber.rolling {
+    color: #fff;
+    text-shadow: 0 0 18px rgba(196, 181, 253, .95), 0 0 42px rgba(124, 58, 237, .85);
 }
 
-.roll-number.winner {
+    #rollNumber.rolling .digit-strip {
+        filter: blur(4px);
+    }
+
+#rollNumber .digit-slot {
+    transition: opacity .35s ease, transform .35s ease, width .35s ease, min-width .35s ease, margin .35s ease;
+}
+
+#rollNumber.winner {
     animation: winner-pop .6s ease-out;
+    text-shadow: 0 0 20px rgba(196, 181, 253, .65), 0 0 45px rgba(124, 58, 237, .4);
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .digit-strip.rolling {
-        animation-duration: .01ms;
+    #rollNumber,
+    #rollNumber .digit-slot,
+    #rollNumber .digit-strip {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+    }
+}
+
+/* =========================================
+   DISCOVERY FINISH EFFECT
+   ========================================= */
+
+/* Remove the rolling effects when the animation finishes */
+#rollNumber.winner {
+    animation: discovery-settle 650ms ease-out forwards;
+    filter: none !important;
+    color: var(--purple-light);
+    text-shadow: 0 0 18px rgba(167, 139, 250, .35);
+}
+
+    #rollNumber.winner .digit-strip {
+        filter: none !important;
+    }
+
+    #rollNumber.winner .digit-slot {
+        filter: none;
+    }
+
+/* Gentle landing instead of an endless glow */
+@keyframes discovery-settle {
+    0% {
+        transform: scale(1.08);
+        opacity: .8;
+        text-shadow: 0 0 30px rgba(196, 181, 253, .9), 0 0 65px rgba(124, 58, 237, .7);
+    }
+
+    55% {
+        transform: scale(1.03);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        filter: none;
+        text-shadow: 0 0 18px rgba(167, 139, 250, .35);
+    }
+}
+
+/* Sparkle particles */
+.number-sparkle {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    width: var(--sparkle-size, 6px);
+    height: var(--sparkle-size, 6px);
+    pointer-events: none;
+    border-radius: 50%;
+    opacity: 0;
+    background: #e9ddff;
+    box-shadow: 0 0 6px #c4b5fd, 0 0 14px #a78bfa, 0 0 22px rgba(167, 139, 250, .6);
+    animation: sparkle-burst var(--sparkle-duration, 850ms) cubic-bezier(.16, .7, .3, 1) forwards;
+}
+
+    .number-sparkle::before,
+    .number-sparkle::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background: #fff;
+        border-radius: 2px;
+        transform: translate(-50%, -50%);
+    }
+
+    .number-sparkle::before {
+        width: 2px;
+        height: 180%;
+    }
+
+    .number-sparkle::after {
+        width: 180%;
+        height: 2px;
+    }
+
+@keyframes sparkle-burst {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.2);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate( calc(-50% + var(--sparkle-x)), calc(-50% + var(--sparkle-y)) ) scale(.15) rotate(160deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #rollNumber.winner {
+        animation: none;
+        filter: none;
+    }
+
+    .number-sparkle {
+        display: none;
     }
 }

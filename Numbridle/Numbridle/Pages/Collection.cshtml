@@ -1,31 +1,62 @@
 ﻿@page
 @model Numbridle.Pages.CollectionModel
+
 @{
     ViewData["Title"] = "Collection";
 }
 
-<main class="game-container">
-    <section class="hero">
-        <span class="eyebrow">YOUR PERSONAL ARCHIVE</span>
-        <h1>Number <span class="gradient-text">collection.</span></h1>
-        <p class="hero-description">
-            Every meaning you've uncovered, saved permanently.
-        </p>
+<main class="game-container collection-page">
+    <section class="hero collection-hero">
+        <div class="hero-content">
+            <span class="eyebrow">
+                <span class="status-dot"></span>
+                YOUR PERSONAL ARCHIVE
+            </span>
+
+            <h1>
+                Number <span class="gradient-text">collection.</span>
+            </h1>
+
+            <p class="hero-description">
+                Every meaning you've uncovered, saved permanently.
+            </p>
+        </div>
+
+        <div class="hero-decoration" aria-hidden="true">∑</div>
     </section>
 
     @if (Model.Discoveries.Count == 0)
     {
-        <section class="empty-state">
-            <div class="empty-icon">⌘</div>
-            <h2>Your archive is empty</h2>
-            <p class="muted">Discover your first number to get started.</p>
+        <section class="empty-state collection-empty">
+            <div class="empty-icon" aria-hidden="true">∅</div>
+
+            <span class="eyebrow">A WORLD TO EXPLORE</span>
+            <h2>Your archive starts here.</h2>
+
+            <p class="muted">
+                Every great collection begins with one discovery.
+                Find your first number and give it meaning.
+            </p>
+
             <a class="game-button button-link" asp-page="/Index">
                 Start discovering
+                <span aria-hidden="true">↗</span>
             </a>
         </section>
     }
     else
     {
+        <section class="collection-summary">
+            <div>
+                <span class="summary-label">TOTAL DISCOVERIES</span>
+                <strong class="summary-value">
+                    @Model.Discoveries.Count.ToString("N0")
+                </strong>
+            </div>
+
+            <div class="summary-icon" aria-hidden="true">▦</div>
+        </section>
+
         <section class="collection-grid">
             @foreach (var discovery in Model.Discoveries)
             {
@@ -34,9 +65,12 @@
                 <article class="discovery-card">
                     <div class="collection-card-top">
                         <span class="rarity-badge rarity-@meaning.Rarity.ToLowerInvariant()">
+                            <span class="rarity-dot"></span>
                             @meaning.Rarity
                         </span>
+
                         <span class="collection-points">
+                            <span aria-hidden="true">✦</span>
                             +@discovery.PointsAwarded.ToString("N0")
                         </span>
                     </div>
@@ -49,12 +83,24 @@
                                 : "0")
                     </div>
 
-                    <h2>@meaning.Name</h2>
-                    <p class="muted">@meaning.Description</p>
+                    <div class="discovery-content">
+                        <h2>@meaning.Name</h2>
 
-                    <span class="collection-date">
-                        Discovered @discovery.DiscoveredAtUtc.ToString("yyyy-MM-dd HH:mm") UTC
-                    </span>
+                        <p class="muted">
+                            @meaning.Description
+                        </p>
+                    </div>
+
+                    <div class="collection-card-footer">
+                        <span class="collection-date">
+                            <span aria-hidden="true">◷</span>
+                            @discovery.DiscoveredAtUtc.ToString("yyyy-MM-dd")
+                        </span>
+
+                        <span class="collection-date">
+                            @discovery.DiscoveredAtUtc.ToString("HH:mm") UTC
+                        </span>
+                    </div>
                 </article>
             }
         </section>
