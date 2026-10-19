@@ -6,22 +6,19 @@
 
     if (!element || !form || !button) return;
 
-    // Mark a roll before submitting the form.
+    const storageKey = "numbridleRolling";
+
     form.addEventListener("submit", () => {
-        sessionStorage.setItem("numbridleRolling", "1");
+        sessionStorage.setItem(storageKey, "1");
         button.disabled = true;
     });
 
-    const shouldAnimate =
-        sessionStorage.getItem("numbridleRolling") === "1";
+    if (sessionStorage.getItem(storageKey) !== "1") return;
 
-    if (!shouldAnimate) return;
-
-    sessionStorage.removeItem("numbridleRolling");
+    sessionStorage.removeItem(storageKey);
 
     const finalNumber = element.textContent.trim();
 
-    // Always preserve the actual six-digit result.
     if (!/^\d{6}$/.test(finalNumber)) {
         button.disabled = false;
         return;
@@ -31,16 +28,41 @@
         "(prefers-reduced-motion: reduce)"
     ).matches;
 
+    const buttonText = button.querySelector(".button-text");
+    const buttonIcon = button.querySelector(".button-icon");
+
+    function finishButton() {
+        button.disabled = false;
+
+        if (buttonText) buttonText.textContent = "ROLL AGAIN";
+        if (buttonIcon) buttonIcon.textContent = "🎲";
+    }
+
+    function showFinal() {
+        const firstNonZero = finalNumber.search(/[1-9]/);
+        const visible = firstNonZero === -1
+            ? "0"
+            : finalNumber.slice(firstNonZero);
+
+        element.replaceChildren();
+        element.textContent = visible;
+        element.dataset.fullNumber = finalNumber;
+        element.classList.remove("rolling");
+        element.classList.add("winner");
+
+        if (hint) {
+            hint.textContent = `Discovery complete: ${visible}`;
+        }
+
+        finishButton();
+    }
+
     if (reducedMotion) {
-        showFinalNumber(element, finalNumber);
-        finish();
+        showFinal();
         return;
     }
 
     button.disabled = true;
-
-    const buttonText = button.querySelector(".button-text");
-    const buttonIcon = button.querySelector(".button-icon");
 
     if (buttonText) buttonText.textContent = "ROLLING...";
     if (buttonIcon) buttonIcon.textContent = "✦";
@@ -50,145 +72,99 @@
     element.classList.remove("winner");
     element.classList.add("rolling");
 
-    // Only remove zeros at the beginning of the final result.
-    // Internal and trailing zeros remain visible.
-    const firstNonZero = finalNumber.search(/[1-9]/);
-    const visibleNumber = firstNonZero === -1
-        ? "0"
-        : finalNumber.slice(firstNonZero);
-
     const slots = [];
-    const digitHeight = 1.2;
 
-    // A temporary random digit stream, different on every roll.
-    for (let index = 0; index < finalNumber.length; index++) {
+    // Build six independent digit windows.
+    for (let i = 0; i < 6; i++) {
         const slot = document.createElement("span");
-        slot.className = "digit-slot";
+        slot.className = "digit-slot is-spinning";
 
-        const strip = document.createElement("span");
-        strip.className = "digit-strip";
+        const digit = document.createElement("span");
+        digit.className = "rolling-digit";
+        digit.textContent = String(
+            Math.floor(Math.random() * 10)
+        );
 
-        const rounds = 5 + Math.floor(Math.random() * 5);
-        const randomStart = Math.floor(Math.random() * 10);
-        const endPosition =
-            rounds * 10 + Number(finalNumber[index]);
-
-        // Start with random digits rather than zero.
-        for (let i = 0; i <= endPosition; i++) {
-            const cell = document.createElement("span");
-
-            cell.textContent = String(
-                Math.floor(Math.random() * 10)
-            );
-
-            strip.appendChild(cell);
-        }
-
-        // The last cell must be the correct final digit.
-        strip.lastElementChild.textContent = finalNumber[index];
-
-        // Begin at a random position in the strip.
-        const startPosition = randomStart;
-        strip.style.transform =
-            `translateY(-${startPosition * digitHeight}em)`;
-
-        slot.appendChild(strip);
+        slot.appendChild(digit);
         element.appendChild(slot);
 
-        slots.push({
-            slot,
-            strip,
-            endPosition,
-            index
-        });
+        slots.push({ slot, digit });
     }
 
-    requestAnimationFrame(() => {
-        // Force initial layout before starting transitions.
-        element.getBoundingClientRect();
+    const sleep = ms =>
+        new Promise(resolve => setTimeout(resolve, ms));
 
-        slots.forEach(({ strip, endPosition, index }) => {
-            const duration = 2.0 + index * 0.28;
-            const delay = (5 - index) * 0.12;
+    function randomDigit() {
+        return String(Math.floor(Math.random() * 10));
+    }
 
-            strip.style.filter = "blur(4px)";
+    async function animate() {
+        // Every digit spins independently and very rapidly.
+        const timers = slots.map(({ digit }) =>
+            window.setInterval(() => {
+                digit.textContent = randomDigit();
+            }, 35)
+        );
 
-            strip.style.transition =
-                `transform ${duration}s cubic-bezier(.12,.75,.18,1) ${delay}s, ` +
-                `filter ${duration}s ease-out ${delay}s`;
+        // Let all digits visibly spin before revealing the result.
+        await sleep(650);
 
-            strip.style.transform =
-                `translateY(-${endPosition * digitHeight}em)`;
+        // Lock each digit from left to right.
+        for (let i = 0; i < 6; i++) {
+            await sleep(i === 0 ? 0 : 330);
 
-            strip.addEventListener("transitionend", (event) => {
-                if (event.propertyName === "filter") {
-                    strip.style.filter = "blur(0)";
-                }
-            }, { once: true });
-        });
+            window.clearInterval(timers[i]);
 
-        const totalDuration = 2.0 + 5 * 0.28 + 5 * 0.12;
+            const { slot, digit } = slots[i];
+            const finalDigit = finalNumber[i];
 
-        window.setTimeout(() => {
-            // Remove leading zeros from the rendered animation.
-            // Do not modify finalNumber or the server result.
-            const leadingZeroCount = firstNonZero === -1
-                ? 5
-                : firstNonZero;
+            digit.textContent = finalDigit;
+            slot.classList.remove("is-spinning");
+            slot.classList.add("is-stopped");
 
-            if (firstNonZero === -1) {
-                // Six zeros become one visible zero.
-                slots.slice(0, 5).forEach(({ slot }, index) => {
-                    slot.style.transition =
-                        "opacity .35s ease, transform .35s ease";
-                    slot.style.opacity = "0";
-                    slot.style.transform = "scale(.5)";
-                });
+            // A leading zero vanishes immediately when it lands.
+            if (finalDigit === "0" &&
+                finalNumber.slice(0, i + 1)
+                    .split("")
+                    .every(d => d === "0")) {
 
-                slots[5].querySelector(".digit-strip")
-                    .lastElementChild.textContent = "0";
-            } else if (leadingZeroCount > 0) {
-                slots.slice(0, leadingZeroCount).forEach(({ slot }) => {
-                    slot.style.transition =
-                        "opacity .35s ease, transform .35s ease, width .35s ease";
-
-                    slot.style.opacity = "0";
-                    slot.style.transform = "translateY(-8px) scale(.6)";
-                    slot.style.width = "0";
-                    slot.style.minWidth = "0";
-                    slot.style.margin = "0";
-                });
+                slot.classList.add("is-hidden-zero");
             }
-
-            // Keep the underlying six-digit result intact.
-            element.dataset.fullNumber = finalNumber;
-            element.classList.remove("rolling");
-            element.classList.add("winner");
 
             if (hint) {
-                hint.textContent =
-                    `Discovery complete: ${visibleNumber}`;
+                hint.textContent = `Revealing digit ${i + 1} of 6...`;
             }
+        }
 
-            finish();
-        }, totalDuration * 1000 + 150);
+        // The last digit must remain visible for 000000.
+        if (finalNumber === "000000") {
+            slots.forEach(({ slot }) => {
+                slot.classList.add("is-hidden-zero");
+            });
+
+            slots[5].slot.classList.remove("is-hidden-zero");
+            slots[5].digit.textContent = "0";
+        }
+
+        element.dataset.fullNumber = finalNumber;
+        element.classList.remove("rolling");
+        element.classList.add("winner");
+
+        const firstNonZero = finalNumber.search(/[1-9]/);
+        const visible = firstNonZero === -1
+            ? "0"
+            : finalNumber.slice(firstNonZero);
+
+        if (hint) {
+            hint.textContent = `Discovery complete: ${visible}`;
+        }
+
+        finishButton();
+    }
+
+
+    animate().catch(error => {
+        console.error("Number animation failed:", error);
+        showFinal();
     });
-
-    function showFinalNumber(target, number) {
-        const first = number.search(/[1-9]/);
-        const visible = first === -1 ? "0" : number.slice(first);
-
-        target.textContent = visible;
-        target.dataset.fullNumber = number;
-    }
-
-    function finish() {
-        button.disabled = false;
-
-        const text = button.querySelector(".button-text");
-        const icon = button.querySelector(".button-icon");
-
-        if (text) text.textContent = "ROLL AGAIN";
-        if (icon) icon.textContent = "🎲";
-    }
 })();

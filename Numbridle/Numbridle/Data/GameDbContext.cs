@@ -42,5 +42,18 @@ public class GameDbContext(
             .WithMany(x => x.Discoveries)
             .HasForeignKey(x => x.NumberMeaningId)
             .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<PlayerTraitDiscovery>()
+    .HasIndex(x => new { x.PlayerId, x.TraitKey })
+    .IsUnique();
+
+        modelBuilder.Entity<PlayerTraitDiscovery>()
+            .Property(x => x.PointsAwarded)
+            .HasDefaultValue(0L);
+
+        modelBuilder.Entity<PlayerTraitDiscovery>()
+            .HasOne(x => x.Player)
+            .WithMany()
+            .HasForeignKey(x => x.PlayerId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1070,11 +1070,414 @@ RANDOM NUMBER ROLL
 
 @media (prefers-reduced-motion: reduce) {
     #rollNumber.winner {
-        animation: none;
+        animation: none;ok
         filter: none;
     }
 
     .number-sparkle {
         display: none;
+    }
+}
+/* =========================================
+   SEQUENTIAL DIGIT ROLL
+   ========================================= */
+
+#rollNumber {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    overflow: visible;
+}
+
+    #rollNumber .digit-slot {
+        display: inline-block;
+        position: relative;
+        flex: 0 0 auto;
+        width: .72em;
+        min-width: .72em;
+        height: 1.2em;
+        margin: 0;
+        overflow: hidden;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        will-change: transform, opacity, width;
+        transition: opacity .35s ease, transform .35s ease, width .35s ease, min-width .35s ease, margin .35s ease;
+    }
+
+    #rollNumber .digit-strip {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        transform: translateY(0);
+        will-change: transform, filter;
+    }
+
+        #rollNumber .digit-strip > span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 1.2em;
+            width: 100%;
+            height: 1.2em;
+            line-height: 1.2em;
+        }
+
+    #rollNumber.rolling {
+        color: #fff;
+        text-shadow: 0 0 18px rgba(196, 181, 253, .95), 0 0 42px rgba(124, 58, 237, .85);
+    }
+
+        #rollNumber.rolling .digit-strip {
+            filter: blur(0);
+        }
+
+    /* Hide leading zeroes instantly when their turn arrives */
+    #rollNumber .digit-slot.is-hidden-zero {
+        visibility: hidden;
+        width: 0 !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        overflow: hidden;
+    }
+
+    /* Final number effect */
+    #rollNumber.winner {
+        animation: discovery-settle 650ms ease-out forwards;
+        color: var(--purple-light);
+        text-shadow: 0 0 18px rgba(167, 139, 250, .35), 0 0 35px rgba(124, 58, 237, .2);
+    }
+
+        #rollNumber.winner .digit-strip {
+            filter: none !important;
+        }
+
+@keyframes discovery-settle {
+    0% {
+        transform: scale(1.08);
+        opacity: .8;
+    }
+
+    55% {
+        transform: scale(1.03);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    #rollNumber .digit-slot {
+        width: .66em;
+        min-width: .66em;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #rollNumber,
+    #rollNumber .digit-slot,
+    #rollNumber .digit-strip {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+    }
+}
+/* =========================================
+   FAST BLUR FOR DIGITS STILL ROLLING
+   ========================================= */
+
+/* Fast-spinning digits stay blurry */
+#rollNumber .digit-slot.is-spinning .digit-strip {
+    filter: blur(3px);
+    text-shadow: 0 0 8px rgba(196, 181, 253, .9), 0 0 18px rgba(167, 139, 250, .8);
+}
+
+/* Smoothly sharpen each digit when it stops */
+#rollNumber .digit-slot.is-stopped .digit-strip {
+    filter: blur(0);
+    text-shadow: none;
+    transition: filter .2s ease-out;
+}
+
+/* Give the rolling digits a brighter glow */
+#rollNumber.rolling .digit-slot.is-spinning {
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(196, 181, 253, 1), 0 0 25px rgba(124, 58, 237, .9);
+}
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+    #rollNumber .digit-slot .digit-strip {
+        filter: none !important;
+    }
+}
+/* Hide the fast-moving digits in a strong motion blur */
+#rollNumber .digit-slot.is-spinning .digit-strip {
+    filter: blur(7px) !important;
+    opacity: 0.75;
+    text-shadow: 0 0 12px #c4b5fd, 0 0 25px #8b5cf6;
+}
+
+/* Make the digit sharp when it stops */
+#rollNumber .digit-slot.is-stopped .digit-strip {
+    filter: blur(0) !important;
+    opacity: 1;
+    text-shadow: none;
+}
+
+/* Keep the animation area clipped */
+#rollNumber .digit-slot {
+    overflow: hidden;
+}
+
+/* Bright glow while the number rolls */
+#rollNumber.rolling {
+    color: white;
+    text-shadow: 0 0 20px #c4b5fd, 0 0 45px #8b5cf6;
+}
+
+/* Number roll animation */
+#rollNumber {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+    #rollNumber .digit-slot {
+        display: inline-flex;
+        flex: 0 0 0.72em;
+        width: 0.72em;
+        height: 1.2em;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    #rollNumber .rolling-digit {
+        display: inline-block;
+        line-height: 1.2;
+    }
+
+    #rollNumber .digit-slot.is-spinning .rolling-digit {
+        filter: blur(3px);
+        opacity: 0.75;
+        text-shadow: 0 0 12px #c4b5fd, 0 0 25px #8b5cf6;
+    }
+
+    #rollNumber .digit-slot.is-stopped .rolling-digit {
+        filter: none;
+        opacity: 1;
+        text-shadow: 0 0 10px #c4b5fd;
+    }
+
+    #rollNumber .digit-slot.is-hidden-zero {
+        flex-basis: 0 !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        opacity: 0;
+        overflow: hidden;
+    }
+
+    #rollNumber.winner {
+        color: var(--purple-light);
+        text-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+    }
+
+@media (max-width: 480px) {
+    #rollNumber .digit-slot {
+        flex-basis: 0.66em;
+        width: 0.66em;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #rollNumber .digit-slot {
+        transition: none !important;
+    }
+}
+/* ========================================
+   NUMBER TRAITS / ACHIEVEMENT COLLECTION
+   ======================================== */
+
+.traits-section {
+    margin-top: 30px;
+}
+
+.traits-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+    .traits-heading h3 {
+        margin: 8px 0 0;
+        font-size: 1.45rem;
+        font-weight: 900;
+        letter-spacing: -.04em;
+    }
+
+.traits-count {
+    color: var(--purple-light);
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.traits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.trait-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+    padding: 15px;
+    background: rgba(21, 18, 37, .88);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    transition: background .2s ease, transform .2s ease;
+}
+
+    .trait-card:hover {
+        background: var(--surface-hover);
+        transform: translateY(-2px);
+    }
+
+.trait-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    background: rgba(167, 139, 250, .12);
+    border-radius: 12px;
+    font-size: 1.35rem;
+}
+
+.trait-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.trait-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+    .trait-title-row h4 {
+        margin: 0;
+        font-size: .85rem;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+.trait-status {
+    padding: 4px 6px;
+    border-radius: 5px;
+    font-size: .55rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+}
+
+.trait-new {
+    color: var(--green);
+    background: rgba(74, 222, 128, .12);
+}
+
+.trait-owned {
+    color: var(--muted);
+    background: rgba(150, 144, 173, .12);
+}
+
+.trait-rarity {
+    display: inline-block;
+    margin-top: 7px;
+    color: var(--purple-light);
+    font-size: .58rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+}
+
+.trait-content p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: .75rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.trait-points {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    gap: 3px;
+}
+
+    .trait-points strong {
+        color: var(--green);
+        font-size: .88rem;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .trait-points span {
+        color: var(--muted);
+        font-size: .58rem;
+        font-weight: 800;
+    }
+
+/* Trait rarity colors */
+
+.trait-card.rarity-common {
+    border-color: rgba(148, 163, 184, .25);
+}
+
+.trait-card.rarity-uncommon {
+    border-color: rgba(74, 222, 128, .3);
+}
+
+.trait-card.rarity-rare {
+    border-color: rgba(96, 165, 250, .35);
+}
+
+.trait-card.rarity-epic {
+    border-color: rgba(167, 139, 250, .4);
+}
+
+.trait-card.rarity-legendary,
+.trait-card.rarity-mythic {
+    border-color: rgba(251, 191, 36, .4);
+}
+
+@media (max-width: 600px) {
+    .traits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .trait-card {
+        padding: 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trait-card {
+        transition: none;
     }
 }
