@@ -1,6 +1,6 @@
 html {
     font-size: 24px;
-    font-style: oblique;
+    font-style: italic;
 }
 
 @media (min-width: 768px) {
@@ -31,9 +31,70 @@ body {
     text-align: start;
 }
 
-div{
+div {
     padding: 10px;
-    background-color: lightblue;
-
+    background-color: lightslategray;
 }
 
+
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 5px;
+    color: darkblue;
+    text-decoration: none;
+    border: 2px solid darkblue;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+    .btn:hover {
+        color: lightblue;
+        border: 2px solid transparent;
+        border-image: linear-gradient(to right, darkblue, lightblue) 1;
+        letter-spacing: 2px;
+        transform: scale(1.1);
+        box-shadow: 0 0 5px darkblue;
+        animation: blueblue 2s ease-in-out infinite alternate;
+    }
+
+@keyframes blueblue {
+    from {
+        box-shadow: 0 0 5px darkblue;
+    }
+
+    to {
+        box-shadow: 0 0 20px lightblue;
+    }
+}
+
+
+a#hmm {
+    color: black;
+    text-decoration: none;
+    animation: yinYang 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes yinYang {
+    from {
+        color: black;
+    }
+
+    to {
+        color: white;
+    }
+}
+
+
+#navbarLogo {
+    color: darkgrey;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+    #navbarLogo:hover {
+        color: lightgrey;
+        transition: color 0.3s ease;
+    }

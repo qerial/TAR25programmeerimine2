@@ -67,15 +67,15 @@
         <br />
     }
     <hr />
-
+    <div>
     <form asp-action="DeletePost" asp-controller="Spaceship" method="post">
         <input type="hidden" asp-for="Id" />
 
-        <input type="submit" value="Delete" class="btn btn-danger" />
+        <input type="submit" value="Delete" class="btn btn-primary btn-lg btn-outline-dark"" />
 
-        <a asp-action="Index" asp-controller="Spaceship" class="btn btn-secondary">
+        <a asp-action="Index" asp-controller="Spaceship" class="btn btn-primary btn-lg btn-outline-dark">
             Back to list
         </a>
     </form>
-
+    </div>
 </div>
