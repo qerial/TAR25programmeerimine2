@@ -173,12 +173,13 @@ body {
         z-index: 2;
     }
 
+/* Move all Kindergarten page content lower */
 .kindergarten-content {
     position: relative;
     z-index: 1;
     width: min(1500px, 92%);
     margin: 0 auto;
-    padding: 100px 0 70px;
+    padding: 170px 0 70px;
 }
 
 .kindergarten-title {
@@ -390,7 +391,7 @@ body {
 @media (max-width: 900px) {
     .kindergarten-content {
         width: 95%;
-        padding-top: 65px;
+        padding-top: 145px;
     }
 
     .kindergarten-table {
@@ -400,7 +401,7 @@ body {
 
 @media (max-width: 600px) {
     .kindergarten-content {
-        padding-top: 45px;
+        padding-top: 125px;
         padding-bottom: 45px;
     }
 

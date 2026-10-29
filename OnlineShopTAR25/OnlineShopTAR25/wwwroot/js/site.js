@@ -74,7 +74,7 @@
         });
 
         document.addEventListener("mouseenter", () => {
-            cursor.style.display = "block";
+            cursor.style.display = "blocmi";
         });
 
         if (canvas) {

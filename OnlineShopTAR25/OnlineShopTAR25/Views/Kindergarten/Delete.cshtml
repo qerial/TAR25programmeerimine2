@@ -4,61 +4,159 @@
     ViewData["Title"] = "Delete Kindergarten";
 }
 
-<div class="container mt-5">
+<div class="home-page kindergarten-page">
 
-    <div class="card shadow">
-        <div class="card-header bg-danger text-white">
-            <h2 class="mb-0">Delete Kindergarten</h2>
-        </div>
-
-        <div class="card-body">
-
-            <h4 class="mb-4">Are you sure you want to delete this kindergarten group?</h4>
-
-            <div class="mb-3">
-                <strong>Group Name:</strong>
-                @Model.GroupName
-            </div>
-
-            <div class="mb-3">
-                <strong>Children Count:</strong>
-                @Model.ChildrenCount
-            </div>
-
-            <div class="mb-3">
-                <strong>Kindergarten Name:</strong>
-                @Model.KindergartenName
-            </div>
-
-            <div class="mb-3">
-                <strong>Teacher Name:</strong>
-                @Model.TeacherName
-            </div>
-
-            <div class="mt-4">
-
-                @foreach (var file in Model.Images)
-                {
-                    <partial name="_Images" model="file" />
-                    <br />
-                }
-                <hr />
-
-                <form asp-action="DeletePost" asp-controller="Kindergarten" method="post">
-                    <input type="hidden" asp-for="Id" />
-
-                    <input type="submit" value="Delete" class="btn btn-danger" />
-
-                    <a asp-action="Index"
-                       asp-controller="Kindergarten"
-                       class="btn btn-secondary">
-                        Back to list
-                    </a>
-                </form>
-
-            </div>
-
-        </div>
+    <div class="network-background">
+        <canvas id="networkCanvas"
+                aria-label="Interactive rotating network sphere"
+                role="img"></canvas>
     </div>
 
+    <div class="home-overlay"></div>
+
+    <nav class="home-nav">
+        <a asp-controller="Home" asp-action="Index" class="home-brand">
+            ONLINE<span>SHOP</span>
+        </a>
+
+        <div class="home-nav-links">
+            <a asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a asp-controller="Kindergarten" asp-action="Index" class="active">
+                Kindergarten
+            </a>
+        </div>
+    </nav>
+
+    <main class="kindergarten-content">
+
+        <p class="home-eyebrow">PLEASE REVIEW BEFORE CONTINUING</p>
+
+        <h1 class="kindergarten-title">
+            Delete<br />
+            <span>Group?</span>
+        </h1>
+
+        <p class="home-description">
+            You are about to remove this kindergarten group.
+            Make sure you have selected the correct one.
+        </p>
+
+        <div class="kindergarten-toolbar">
+            <div>
+                <span class="kindergarten-label">GROUP TO DELETE</span>
+                <p class="kindergarten-subtitle">@Model.GroupName</p>
+            </div>
+
+            <span class="table-action delete-action">
+                PERMANENT ACTION
+            </span>
+        </div>
+
+        <div class="kindergarten-table-wrapper">
+
+            <div class="kindergarten-details-grid">
+
+                <div class="kindergarten-detail-item">
+                    <span class="kindergarten-label">GROUP NAME</span>
+                    <p>@Model.GroupName</p>
+                </div>
+
+                <div class="kindergarten-detail-item">
+                    <span class="kindergarten-label">CHILDREN</span>
+                    <p>
+                        <span class="children-badge">
+                            @Model.ChildrenCount
+                        </span>
+                    </p>
+                </div>
+
+                <div class="kindergarten-detail-item">
+                    <span class="kindergarten-label">KINDERGARTEN</span>
+                    <p>@Model.KindergartenName</p>
+                </div>
+
+                <div class="kindergarten-detail-item">
+                    <span class="kindergarten-label">TEACHER</span>
+                    <p>@Model.TeacherName</p>
+                </div>
+
+            </div>
+
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                <div class="kindergarten-toolbar">
+                    <div>
+                        <span class="kindergarten-label">ASSOCIATED IMAGES</span>
+                        <p class="kindergarten-subtitle">
+                            Images linked to this group
+                        </p>
+                    </div>
+                </div>
+
+                <div class="kindergarten-images">
+                    @foreach (var file in Model.Images)
+                    {
+                        <div class="kindergarten-image-item">
+                            <partial name="_Images" model="file" />
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="kindergarten-delete-warning">
+                <strong>Are you sure?</strong>
+                <p>
+                    Deleting this group may also affect its associated images.
+                    This action cannot be undone.
+                </p>
+            </div>
+
+            <form asp-action="DeletePost"
+                  asp-controller="Kindergarten"
+                  method="post"
+                  class="kindergarten-form-actions">
+
+                <input type="hidden" asp-for="Id" />
+
+                <button type="submit"
+                        class="home-button home-button-danger">
+                    DELETE GROUP
+                </button>
+
+                <a asp-action="Index"
+                       asp-controller="Kindergarten"
+                       class="home-button home-button-secondary">
+                    CANCEL
+                </a>
+
+            </form>
+
+        </div>
+
+        <div class="kindergarten-bottom">
+            <a asp-action="Index"
+                   asp-controller="Kindergarten"
+                   class="home-button home-button-secondary">
+                ← BACK TO GROUPS
+            </a>
+
+            <span class="home-hint">
+                <span class="home-hint-dot"></span>
+                CONFIRM BEFORE DELETING
+            </span>
+        </div>
+
+    </main>
+
+    <footer class="home-footer">
+        <span>ONLINE SHOP TAR25</span>
+        <span>BUILT TO EXPLORE</span>
+    </footer>
+
 </div>
+
+@section Scripts {
+    <script src="~/js/network-background.js"
+            asp-append-version="true"></script>
+}
