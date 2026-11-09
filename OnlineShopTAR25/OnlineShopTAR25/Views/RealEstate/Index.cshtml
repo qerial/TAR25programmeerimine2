@@ -1,0 +1,58 @@
+﻿@model IEnumerable<OnlineShopTAR25.Models.RealEstate.RealEstateIndexViewModel>
+
+
+@{
+    int rowNumber = 1;
+}
+
+<div class="h1">
+    RealEstate
+</div>
+<form method="get">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nr</th>
+                <th scope="col">Area</th>
+                <th scope="col">Address</th>
+                <th scope="col">RoomNumber</th>
+                <th scope="col">BuildingType</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var realEstate in Model)
+            {
+                <tr>
+                    <td>"@rowNumber"</td>
+                    <td>@realEstate.Area</td>
+                    <td>@realEstate.Address</td>
+                    <td>@realEstate.RoomNumber</td>
+                    <td>@realEstate.BuildingType</td>
+                    <td>
+                        <a asp-action="Delete"
+                           asp-controller="RealEstate"
+                           asp-route-id="@realEstate.Id"
+                           class="btn btn-primary btn-lg btn-outline-dark">Delete</a>
+
+                        <a asp-action="Details"
+                           asp-controller="RealEstate"
+                           asp-route-id="@realEstate.Id"
+                           class="btn btn-primary btn-lg btn-outline-dark">Details</a>
+
+                        <a asp-action="Update"
+                           asp-controller="RealEstate"
+                           asp-route-id="@realEstate.Id"
+                           class="btn btn-primary btn-lg btn-outline-dark">Update</a>
+
+
+                    </td>
+                </tr>
+                rowNumber++;
+            }
+        </tbody>
+    </table>
+</form>
+<a asp-action="Index" asp-controller="Home" type="" class="btn btn-primary  btn-lg  btn-outline-dark ">Back to home</a>
+
+<a asp-action="create" asp-controller="RealEstate" type="" class="btn btn-primary  btn-lg  btn-outline-dark">Create</a>
