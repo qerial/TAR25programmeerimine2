@@ -168,7 +168,7 @@ namespace OnlineShopTAR25.Controllers
                 RoomNumber = vm.RoomNumber,
                 BuildingType = vm.BuildingType
             };
-                
+
 
             var result = await _RealEstateServices.Update(dto);
             if (result == null)
@@ -199,8 +199,7 @@ namespace OnlineShopTAR25.Controllers
                 vm.CreateAt = realestate.CreateAt;
                 vm.ModifiedAt = realestate.ModifiedAt;
 
-            }
-            ;
+            };
 
             return View(vm);
         }
@@ -219,6 +218,26 @@ namespace OnlineShopTAR25.Controllers
             await _RealEstateServices.Delete(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        RealEstateImageViewModel[] images = await FileFromDatabase(id);
+
+        var vm = new 
+
+        private async Task<RealEstateImageViewModel[]> FileFromDatabase(Guid id)
+        {
+            var result = await _context.FileToDatabases
+                .Where(x => x.RealEstateId == id)
+                .Select(y => new RealEstateImageViewModel
+                {
+                    ImageId = y.Id,
+                    RealEstateId = y.id,
+                    ImageData = y.imageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync;
+            return result;
+            }
         }
     }
 }

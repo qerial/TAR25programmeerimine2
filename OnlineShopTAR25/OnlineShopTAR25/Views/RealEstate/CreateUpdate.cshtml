@@ -1,5 +1,6 @@
 ﻿@model OnlineShopTAR25.Models.RealEstate.RealEstateCreateUpdateViewModel
 
+
 @if (Model.Id.HasValue)
 {
     <h1>RealEstate Update</h1>
@@ -31,7 +32,19 @@ else
         <input asp-for="BuildingType" class="form-control" />
         <span asp-validation-for="BuildingType" class="text-danger"></span>
     </div>
-    <hr />
+
+
+    <div class="form-group row">
+        <label asp-for="Files" class="col col-form-label"></label>
+        <input asp-for="Files" class="form-control" type="file" multiple/>
+    </div>
+
+    <div>
+        @foreach (var images in Model.Image)
+            {
+                <partial name="_Images" model="images"/>
+            }
+        </div>
 
     @if (Model.Id.HasValue)
     {
