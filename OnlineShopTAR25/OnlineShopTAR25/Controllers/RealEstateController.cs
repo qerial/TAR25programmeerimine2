@@ -96,19 +96,21 @@ namespace ShopTARpe25.Controllers
                 return NotFound();
             }
 
-            var vm = new RealEstateCreateUpdateViewModel
-            {
-                Id = result.Id,
-                Area = result.Area,
-                Address = result.Address,
-                RoomNumber = result.RoomNumber,
-                BuildingType = result.BuildingType,
-                CreateAt = result.CreateAt,
-                ModifiedAt = result.ModifiedAt,
-            };
+            RealEstateImageViewModel[] images = await FileFromDatabase(id);
 
+            var vm = new RealEstateCreateUpdateViewModel();
+
+            vm.Id = result.Id;
+            vm.Area = result.Area;
+            vm.Address = result.Address;
+            vm.RoomNumber = result.RoomNumber;
+            vm.BuildingType = result.BuildingType;
+            vm.CreateAt = result.CreateAt;
+            vm.ModifiedAt = result.ModifiedAt;
+            vm.Image.AddRange(images);
             return View("CreateUpdate", vm);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Update(RealEstateCreateUpdateViewModel vm)
@@ -148,17 +150,18 @@ namespace ShopTARpe25.Controllers
             {
                 return NotFound();
             }
+            RealEstateImageViewModel[] images = await FileFromDatabase(id);
 
-            var vm = new RealEstateDeleteViewModel
-            {
-                Id = result.Id,
-                Area = result.Area,
-                Address = result.Address,
-                RoomNumber = result.RoomNumber,
-                BuildingType = result.BuildingType,
-                CreateAt = result.CreateAt,
-                ModifiedAt = result.ModifiedAt,
-            };
+            var vm = new RealEstateDeleteViewModel();
+
+                vm.Id = result.Id;
+                vm.Area = result.Area;
+                vm.Address = result.Address;
+                vm.RoomNumber = result.RoomNumber;
+                vm.BuildingType = result.BuildingType;
+                vm.CreateAt = result.CreateAt;
+                vm.ModifiedAt = result.ModifiedAt;
+                vm.Image.AddRange(images);
             return View(vm);
         }
 
@@ -202,6 +205,8 @@ namespace ShopTARpe25.Controllers
 
             return View(vm);
         }
+
+
 
 
         private async Task<RealEstateImageViewModel[]> FileFromDatabase(Guid id)
