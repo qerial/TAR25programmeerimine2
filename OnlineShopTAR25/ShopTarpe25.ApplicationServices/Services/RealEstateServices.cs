@@ -60,19 +60,24 @@ namespace ShopTarpe25.ApplicationServices.Services
         }
         public async Task<RealEstate> Update(RealEstateDto dto)
         {
-            RealEstate realEstate = new();
+            RealEstate domain = new();
 
-            realEstate.Area = dto.Area;
-            realEstate.Address = dto.Address;
-            realEstate.RoomNumber = dto.RoomNumber;
-            realEstate.BuildingType = dto.BuildingType;
-            realEstate.CreateAt = DateTime.Now;
-            realEstate.ModifiedAt = DateTime.Now;
+            domain.Area = dto.Area;
+            domain.Address = dto.Address;
+            domain.RoomNumber = dto.RoomNumber;
+            domain.BuildingType = dto.BuildingType;
+            domain.CreateAt = dto.CreateAt;
+            domain.ModifiedAt = DateTime.Now;
 
-            _context.RealEstates.Update(realEstate);
+            if(dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, domain);
+            }
+
+            _context.RealEstates.Update(domain);
             await _context.SaveChangesAsync();
 
-            return realEstate;
+            return domain;
         }
 
         public async Task<RealEstate> Delete(Guid id)
@@ -80,7 +85,14 @@ namespace ShopTarpe25.ApplicationServices.Services
             var result = await _context.RealEstates
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-
+            var images = await _context.FileToDatabases
+                .Where(x => x.RealEstateId == Id)
+                .Select(y => new FileToDatabaseDto
+                {
+                    Id = y.Id,
+                    ImageTitle = y.ImageTitle,
+                    RealEstateId = y.RealEstateId
+                }).ToArrayAsync();
 
             _context.RealEstates.Remove(result);
             await _context.SaveChangesAsync();

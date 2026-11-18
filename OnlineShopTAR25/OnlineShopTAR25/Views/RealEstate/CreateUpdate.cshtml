@@ -38,6 +38,14 @@ else
         <label asp-for="Files" class="col col-form-label"></label>
         <input asp-for="Files" class="form-control" type="file" multiple/>
     </div>
+    <div>
+        @foreach (var images in Model.Image)
+            {
+                <partial name="_images" model="images" />
+                <input asp-action="removeImage" asp-controller="RealEstate" asp-route-imageId="@images.ImageId"
+                type="submit" class="btn-outline-danger"" value="Remove Image" />
+            }
+        </div>
 
     <div>
         @foreach (var images in Model.Image)
