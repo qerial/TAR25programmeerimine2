@@ -113,7 +113,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             //toimub kontroll, kas vähemalt üks fail või mitu
             if (dto.Files != null && dto.Files.Count > 0)
             {
-                //tuleb kasutada foreachi, et mitu faili ülesse laadida
+                //tuleb kasutada foreach,et mitu faili üles laadida
                 foreach (var file in dto.Files)
                 {
                     //foreachi sees tuleb kasutada using-t
@@ -134,6 +134,41 @@ namespace ShopTARpe25.ApplicationServices.Services
                     }
                 }
             }
+        }
+
+        public async Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabaseDto dto)
+        {
+
+            //kui on vaja kustutada fail, siis tuleb see üles leida
+            var imageId = await _context.FileToDatabases
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            _context.FileToDatabases.Remove(imageId);
+            await _context.SaveChangesAsync();
+
+            if (imageId == null)
+            {
+                return null;
+            }
+
+
+            return imageId;
+        }
+
+        //kui kustutad mitu piltim siis peab olema massiivis.
+        public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var image = await _context.FileToDatabases
+                    .Where(x => x.Id == dto.Id)
+                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+                _context.FileToDatabases.Remove(image);
+                await _context.SaveChangesAsync();
+            }
+
+            return null;
         }
     }
 }

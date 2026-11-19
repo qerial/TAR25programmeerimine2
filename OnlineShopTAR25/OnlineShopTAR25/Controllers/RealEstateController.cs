@@ -245,13 +245,13 @@ namespace ShopTARpe25.Controllers
                 Id = vm.ImageId
             };
 
-            var image = await FileServices.RemoveImageFromDatabase(dto);
+            var image = await _fileService.RemoveImageFromDatabase(dto);
 
             var realEstateId = image.RealEstateId;
 
             if (image == null)
             {
-                return RedirectToAction(nameof(index));
+                return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Update), new { id = realEstateId });

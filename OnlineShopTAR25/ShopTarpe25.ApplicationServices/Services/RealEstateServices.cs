@@ -86,15 +86,17 @@ namespace ShopTarpe25.ApplicationServices.Services
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             var images = await _context.FileToDatabases
-                .Where(x => x.RealEstateId == Id)
+                .Where(x => x.RealEstateId == id)
                 .Select(y => new FileToDatabaseDto
                 {
                     Id = y.Id,
                     ImageTitle = y.ImageTitle,
                     RealEstateId = y.RealEstateId
                 }).ToArrayAsync();
-
-            _context.RealEstates.Remove(result);
+            await _fileServices.RemoveImagesFromDatabase(images);
+            await _context.RealEstates
+                .Where(x => x.Id == id)
+                .ExecuteDeleteAsync();
             await _context.SaveChangesAsync();
 
             return result;
