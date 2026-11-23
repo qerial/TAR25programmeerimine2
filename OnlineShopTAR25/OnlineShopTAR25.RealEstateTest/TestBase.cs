@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OnlineShopTAR25.RealEstateTest.Macros;
+using OnlineShopTAR25.RealEstateTest.Mock;
 using ShopTarpe25.ApplicationServices.Services;
+using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 using System;
@@ -31,6 +34,10 @@ namespace OnlineShopTAR25.RealEstateTest
         public virtual void SetupServices(IServiceCollection services)
         {
             services.AddScoped<IRealEstateServices, RealEstateServices>();
+            //Miks pidi lisama kaks servicit juurde, kuigi me tahame testida ainult RealEstate CRUD-i?
+            //Sest nad on omavahel CRUD-ga seostus
+            services.AddScoped<IFileServices, FileServices>();
+            services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 
             //registreerib andmebaasi konteksti
             services.AddDbContext<ShopTARpe25Context>(x =>
