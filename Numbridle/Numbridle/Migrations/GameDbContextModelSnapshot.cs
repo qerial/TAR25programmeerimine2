@@ -92,6 +92,53 @@ namespace Numbridle.Migrations
                     b.ToTable("NumberMeanings");
                 });
 
+            modelBuilder.Entity("Numbridle.Models.PlayerTraitDiscovery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DiscoveredAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Emoji")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("PointsAwarded")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.Property<string>("Rarity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TraitKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId", "TraitKey")
+                        .IsUnique();
+
+                    b.ToTable("PlayerTraitDiscovery");
+                });
+
             modelBuilder.Entity("Player", b =>
                 {
                     b.Property<int>("Id")
@@ -132,6 +179,17 @@ namespace Numbridle.Migrations
                         .IsRequired();
 
                     b.Navigation("NumberMeaning");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Numbridle.Models.PlayerTraitDiscovery", b =>
+                {
+                    b.HasOne("Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Player");
                 });

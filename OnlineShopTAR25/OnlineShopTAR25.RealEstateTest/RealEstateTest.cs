@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Identity.Client;
 using ShopTarpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
@@ -35,7 +36,7 @@ namespace OnlineShopTAR25.RealEstateTest
 
         //teha test, kusotsib ankeeti id alusel, aga seda ei ole andmebaasis
         [Fact]
-        public async Task Should_GetByIdRealEstate_WhenReturnsEqual()
+        public async Task ShouldNot_GetByIdRealEstate_WhenReturnsEqual()
         {
             //Arrange
             Guid databaseGuid = Guid.Parse("8bc0e1a1-7453-4f63-9eb3-5321cc7ea93f");
@@ -49,7 +50,50 @@ namespace OnlineShopTAR25.RealEstateTest
             //Assert
             //vastupidist loogikat tuleb kasutada
 
-            Assert.NotEqual(wrongGuid, databaseGuid)
+            Assert.NotEqual(wrongGuid, databaseGuid);
+        }
+        [Fact]
+        //mul on vaja testida DetailAsync meetodit
+        public async Task Should_GetByIdRealestate_WhenReturnsEqual()
+        {
+            //arrange
+            //see guid on juba andmebaasis olemas ankeedi juures
+            Guid guid = Guid.Parse("8bc0e1a1-7453-4f63-9eb3-5321cc7ea93f");
+            //kui vajutad nupule, siis see guid saadetakse andmebaasi, mida võrreldakse
+            Guid databaseGuid = Guid.Parse("8bc0e1a1-7453-4f63-9eb3-5321cc7ea93f");
+
+            //act
+            await Svc<IRealEstateServices>().Details(guid);
+            //assert
+            Assert.Equal(databaseGuid, guid);
+        }
+        //kustutamise meetodit on vaja testida. Andmebaasis on ankeet, mida
+        //tahan ära kustutada
+        [Fact]
+        public async Task Should_DeleteByIdRealEstate_WhenDeleteRealEstate()
+        {
+            //Arrange
+            RealEstateDto dto = MockRealEstateData();
+            //Act
+
+            var createdb = await Svc<IRealEstateServices>().Create(dto);
+            var deleteRealestateId = await Svc<IRealEstateServices>().Delete((Guid)createdb.Id);
+            //Assert
+            //võrdlen Id-sid, kas kustutasin selle ära, mis oli andmebaasis
+            Assert.Equal(createdb.Id, deleteRealestateId.Id);
+        }
+
+        private RealEstateDto MockRealEstateData()
+        {
+            return new RealEstateDto
+            {
+                Area = 120.5,
+                Address = "Test location",
+                RoomNumber = 3,
+                BuildingType = "house",
+                CreateAt = DateTime.Now,
+                ModifiedAt = DateTime.Now,
+            };
         }
     }
 }
